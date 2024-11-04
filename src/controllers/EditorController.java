@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import models.EditorModel;
 import views.EditorView;
 
 /**
@@ -12,8 +13,23 @@ import views.EditorView;
  */
 public class EditorController {
     private final EditorView view;
+    private final EditorModel model;
     
-    public EditorController(EditorView view) {
+    public EditorController(EditorView view, EditorModel model) {
         this.view = view;
+        this.model = model;
     }
+    
+    public void updateCode() {
+        // 1. Get text written in the Editor
+        String editorContent = this.view.getEditorContent();
+        
+        // 2. Update the code inside the editor model
+        this.model.setCode(editorContent);
+    }
+    
+    public String getCode() {
+        return this.model.getCode();
+    }
+    
 }

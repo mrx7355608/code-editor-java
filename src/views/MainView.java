@@ -7,6 +7,7 @@ import event_handlers.ConsoleMouseListener;
 import event_handlers.EditorKeyListener;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
+import models.EditorModel;
 
 
 public class MainView extends JFrame {
@@ -31,7 +32,8 @@ public class MainView extends JFrame {
     
     private void setupEditor() {
         EditorView view = new EditorView();
-        EditorController controller = new EditorController(view);
+        EditorModel model = new EditorModel();
+        EditorController controller = new EditorController(view, model);
         EditorKeyListener listener = new EditorKeyListener(controller);
         
         view.attachKeyListener(listener);

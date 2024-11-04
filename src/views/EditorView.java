@@ -8,8 +8,6 @@ import javax.swing.JTextPane;
 public class EditorView extends JPanel {
 
     private final JTextPane editor;
-    private final String filePath = "src/views/Test.java";
-    private boolean saved = true;
 
     public EditorView() {
         editor = new JTextPane();
@@ -21,17 +19,9 @@ public class EditorView extends JPanel {
     public void attachKeyListener(KeyListener listener) {
         this.editor.addKeyListener(listener);
     }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public boolean isSaved() {
-        return saved;
-    }
-
-    public void setSaved(boolean saved) {
-        this.saved = saved;
+    
+    public String getEditorContent() {
+        return this.editor.getText();
     }
     
 }
