@@ -2,6 +2,7 @@ package views;
 
 import controllers.ConsoleController;
 import controllers.EditorController;
+import controllers.MenuController;
 import event_handlers.ConsoleMouseListener;
 import event_handlers.EditorKeyListener;
 import java.awt.BorderLayout;
@@ -13,6 +14,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 import models.EditorModel;
 
 public class MainView extends JFrame {
+    
+    EditorController editorController;
+    ConsoleController consoleController;
+    
 
     public MainView() {
         this.useSystemLookAndFeel();
@@ -22,9 +27,10 @@ public class MainView extends JFrame {
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setLayout(new BorderLayout());
         super.setLocationRelativeTo(null);
-
+        
         this.setupEditor();
         this.setupConsole();
+        this.setupMenuBar();
     }
 
     private void useSystemLookAndFeel() {
@@ -40,8 +46,8 @@ public class MainView extends JFrame {
 
     private void setupConsole() {
         ConsoleView view = new ConsoleView();
-        ConsoleController controller = new ConsoleController(view);
-        ConsoleMouseListener mouseListener = new ConsoleMouseListener(controller);
+        consoleController = new ConsoleController(view);
+        ConsoleMouseListener mouseListener = new ConsoleMouseListener(consoleController);
 
         view.addClickHandler(mouseListener);
         super.add(view, BorderLayout.SOUTH);
@@ -50,11 +56,17 @@ public class MainView extends JFrame {
     private void setupEditor() {
         EditorView view = new EditorView();
         EditorModel model = new EditorModel();
-        EditorController controller = new EditorController(view, model);
-        EditorKeyListener listener = new EditorKeyListener(controller);
+        editorController = new EditorController(view, model);
+        EditorKeyListener listener = new EditorKeyListener(editorController);
 
         view.attachKeyListener(listener);
-        super.setJMenuBar(view.getMenuBar());
         super.add(view, BorderLayout.NORTH);
+    }
+    
+    private void setupMenuBar() {
+        MenuView view = new MenuView();
+        MenuController controller = new MenuController(editorController, consoleController, view);
+        controller.addFileMenuActionHandlers();
+        super.setJMenuBar(view);
     }
 }
