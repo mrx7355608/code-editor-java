@@ -2,7 +2,6 @@ package views;
 
 import controllers.ConsoleController;
 import controllers.EditorController;
-import controllers.FileController;
 import event_handlers.ConsoleMouseListener;
 import event_handlers.EditorKeyListener;
 import java.awt.BorderLayout;
@@ -12,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import models.EditorModel;
-import models.FileModel;
 
 public class MainView extends JFrame {
 
@@ -23,8 +21,8 @@ public class MainView extends JFrame {
         super.setTitle("Hello");
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setLayout(new BorderLayout());
+        super.setLocationRelativeTo(null);
 
-        this.setupFileIO();
         this.setupEditor();
         this.setupConsole();
     }
@@ -56,13 +54,7 @@ public class MainView extends JFrame {
         EditorKeyListener listener = new EditorKeyListener(controller);
 
         view.attachKeyListener(listener);
+        super.setJMenuBar(view.getMenuBar());
         super.add(view, BorderLayout.NORTH);
-    }
-
-    private void setupFileIO() {
-        FileView view = new FileView();
-        FileModel model = new FileModel();
-        FileController controller = new FileController(model, view);
-        super.setJMenuBar(view);
     }
 }

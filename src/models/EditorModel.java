@@ -9,29 +9,30 @@ package models;
  * @author ghost
  */
 public class EditorModel {
-    private String code;
-    private Boolean isSaved;
+    private final EditorFile file;
 
     public EditorModel() {
-        this.code = "";
-        this.isSaved = false;
+        this.file = new EditorFile();
     }
 
     public String getCode() {
-        return code;
+        return this.file.getCode();
     }
 
     public Boolean getIsSaved() {
-        return isSaved;
+        return this.file.getIsSaved();
     }
 
     public void setCode(String code) {
-        this.code = code;
+        this.file.setCode(code);
     }
 
     public void setIsSaved(Boolean isSaved) {
-        this.isSaved = isSaved;
+        this.file.setIsSaved(isSaved);
     }
     
+    public String getFilePath() {
+        return this.file.getPath();
+    }
     
 }

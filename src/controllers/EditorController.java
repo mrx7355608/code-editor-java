@@ -28,12 +28,13 @@ public class EditorController {
         this.model.setCode(editorContent);
     }
     
+    public void saveFile() {}
+    
+    public void createFile() {}
+    public void openFile() {}
+    
     public String getCode() {
         return this.model.getCode();
-    }
-    
-    public Boolean isFileSaved() {
-        return this.model.getIsSaved();
     }
     
 }

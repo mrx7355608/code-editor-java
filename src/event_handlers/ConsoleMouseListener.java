@@ -6,7 +6,6 @@ package event_handlers;
 
 import controllers.ConsoleController;
 import controllers.EditorController;
-import controllers.FileController;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 //import java.io.File;
@@ -22,15 +21,11 @@ import java.awt.event.MouseListener;
 public class ConsoleMouseListener implements MouseListener {
 
     private final ConsoleController consoleController;
-//    private final EditorController editorController;
-//    private final FileController fileController;
 
     public ConsoleMouseListener(
             ConsoleController controller1
     ) {
         this.consoleController = controller1;
-//        this.editorController = controller2;
-//        this.fileController = controller3;
     }
 
     @Override
