@@ -21,11 +21,14 @@ import java.awt.event.MouseListener;
 public class ConsoleMouseListener implements MouseListener {
 
     private final ConsoleController consoleController;
+    private final EditorController editorController;
 
     public ConsoleMouseListener(
-            ConsoleController controller1
+            ConsoleController controller1,
+            EditorController controller2
     ) {
         this.consoleController = controller1;
+        this.editorController = controller2;
     }
 
     @Override
@@ -81,7 +84,7 @@ public class ConsoleMouseListener implements MouseListener {
 //        }
         
         // 5. Lastly, execute the code
-        this.consoleController.executeCode();
+        this.consoleController.executeCode(this.editorController.getFilePath());
     }
 
     @Override

@@ -47,7 +47,7 @@ public class MainView extends JFrame {
     private void setupConsole() {
         ConsoleView view = new ConsoleView();
         consoleController = new ConsoleController(view);
-        ConsoleMouseListener mouseListener = new ConsoleMouseListener(consoleController);
+        ConsoleMouseListener mouseListener = new ConsoleMouseListener(consoleController, editorController);
 
         view.addClickHandler(mouseListener);
         super.add(view, BorderLayout.SOUTH);

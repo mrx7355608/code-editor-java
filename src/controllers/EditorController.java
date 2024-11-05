@@ -4,7 +4,6 @@
  */
 package controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -69,6 +68,10 @@ public class EditorController {
     
     public String getCode() {
         return this.model.getCode();
+    }
+    
+    public String getFilePath() {
+        return this.model.getFilePath();
     }
     
 }

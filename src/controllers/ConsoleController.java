@@ -72,8 +72,7 @@ public class ConsoleController {
         }
     }
     
-    public void executeCode() {
-        String filePath = "src/views/Test.java";
+    public void executeCode(String filePath) {
         if (this.compileCode(filePath)) {
             this.runCode(filePath);
         }

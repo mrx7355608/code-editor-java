@@ -30,7 +30,7 @@ public class MenuController {
             this.editorController.openFile();
         });
         this.view.runCodeItem.addActionListener((ActionEvent e) -> {
-            this.consoleController.executeCode();
+            this.consoleController.executeCode(this.editorController.getFilePath());
         });
     }
     
