@@ -37,7 +37,7 @@ public class EditorKeyListener implements KeyListener {
             } finally {
                 delayedMap.remove("test");
             }
-        }, 500, TimeUnit.MILLISECONDS));
+        }, 800, TimeUnit.MILLISECONDS));
         
         if (prev != null) {
             System.out.println("cancelling...");

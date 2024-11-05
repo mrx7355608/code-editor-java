@@ -54,7 +54,6 @@ public class ConsoleController {
     
     private void runCode(String filePath) {
         try {
-            System.out.println("Exevuting..");
             ProcessBuilder runProcessBuilder = new ProcessBuilder("java", filePath);
             Process runProcess = runProcessBuilder.start();
 
@@ -74,8 +73,6 @@ public class ConsoleController {
     }
     
     public void executeCode() {
-        // TODO: Check if code has been saved or not
-
         String filePath = "src/views/Test.java";
         if (this.compileCode(filePath)) {
             this.runCode(filePath);

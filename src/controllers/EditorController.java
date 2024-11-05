@@ -32,4 +32,8 @@ public class EditorController {
         return this.model.getCode();
     }
     
+    public Boolean isFileSaved() {
+        return this.model.getIsSaved();
+    }
+    
 }
