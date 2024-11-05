@@ -9,7 +9,7 @@ package models;
  * @author ghost
  */
 public class EditorModel {
-    private final EditorFile file;
+    private EditorFile file;
 
     public EditorModel() {
         this.file = new EditorFile();
@@ -33,6 +33,10 @@ public class EditorModel {
     
     public String getFilePath() {
         return this.file.getPath();
+    }
+
+    public void setFile(EditorFile file) {
+        this.file = file;
     }
     
 }

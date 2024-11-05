@@ -4,6 +4,14 @@
  */
 package controllers;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import models.EditorFile;
 import models.EditorModel;
 import views.EditorView;
 
@@ -30,8 +38,34 @@ public class EditorController {
     
     public void saveFile() {}
     
-    public void createFile() {}
-    public void openFile() {}
+    public void createFile() {
+        JFileChooser chooser = new JFileChooser();
+        if (chooser.showDialog(null, "Create file") == JFileChooser.APPROVE_OPTION) {
+            String path = chooser.getSelectedFile().getAbsolutePath();
+            System.out.println(path);
+        }
+    }
+    
+    public void openFile() {
+        JFileChooser chooser = new JFileChooser();
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            String filePath = chooser.getSelectedFile().getAbsolutePath();             
+            String fileContent = this.loadFileContent(filePath);
+            String name = chooser.getSelectedFile().getName();
+            this.model.setFile(new EditorFile(name, filePath, fileContent));
+            this.view.update();
+        }
+    }
+    
+    private String loadFileContent(String path) {
+        try {
+            String fileContent = new String(Files.readAllBytes(Paths.get(path)));
+            return fileContent;
+        } catch (IOException ex) {
+            Logger.getLogger(EditorController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
     
     public String getCode() {
         return this.model.getCode();

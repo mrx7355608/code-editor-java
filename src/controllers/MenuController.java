@@ -26,6 +26,9 @@ public class MenuController {
         this.view.newFileItem.addActionListener((ActionEvent e) -> {
             this.editorController.createFile();
         });
+        this.view.openFileItem.addActionListener((ActionEvent e) -> {
+            this.editorController.openFile();
+        });
         this.view.runCodeItem.addActionListener((ActionEvent e) -> {
             this.consoleController.executeCode();
         });

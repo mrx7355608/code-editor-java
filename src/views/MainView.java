@@ -54,8 +54,8 @@ public class MainView extends JFrame {
     }
 
     private void setupEditor() {
-        EditorView view = new EditorView();
         EditorModel model = new EditorModel();
+        EditorView view = new EditorView(model);
         editorController = new EditorController(view, model);
         EditorKeyListener listener = new EditorKeyListener(editorController);
 
