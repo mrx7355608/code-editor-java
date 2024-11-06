@@ -32,6 +32,9 @@ public class MenuController {
         this.view.runCodeItem.addActionListener((ActionEvent e) -> {
             this.consoleController.executeCode(this.editorController.getFilePath());
         });
+        this.view.saveFileItem.addActionListener((ActionEvent e) -> {
+            this.editorController.saveFile();
+        });
     }
     
 }

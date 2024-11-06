@@ -1,7 +1,6 @@
 package views;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;

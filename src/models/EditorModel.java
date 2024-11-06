@@ -22,6 +22,14 @@ public class EditorModel {
     public Boolean getIsSaved() {
         return this.file.getIsSaved();
     }
+    
+    public EditorFile getFile() {
+        return this.file;
+    }
+    
+    public String getFileName() {
+        return this.file.getName();
+    }
 
     public void setCode(String code) {
         this.file.setCode(code);

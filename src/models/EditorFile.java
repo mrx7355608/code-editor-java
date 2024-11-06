@@ -49,6 +49,10 @@ public class EditorFile {
     public Boolean getIsSaved() {
         return isSaved;
     }
+    
+    public Boolean isNewlyCreated() {
+        return this.path == null;
+    }
 
     public void setName(String name) {
         this.name = name;
