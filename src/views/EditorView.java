@@ -1,5 +1,7 @@
 package views;
 
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
@@ -16,6 +18,7 @@ public class EditorView extends JPanel {
         
         editor = new JTextPane();
         editor.setPreferredSize(new Dimension(800, 400));
+        editor.setCaretColor(Color.red);
         
         super.add(editor);
         super.setSize(800, 400);
@@ -31,7 +34,7 @@ public class EditorView extends JPanel {
     
     
     public void update() {
-        editor.setText(this.model.getCode());
+        editor.setText(this.model.getFile().getCode());
     }
     
 }

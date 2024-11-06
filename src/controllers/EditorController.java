@@ -4,6 +4,8 @@
  */
 package controllers;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,16 +35,16 @@ public class EditorController {
     public void updateCode() {
         // 1. Get text written in the Editor
         String editorContent = this.view.getEditorContent();
-
+        
         // 2. Update the code inside the editor model
-        this.model.setCode(editorContent);
+        this.model.getFile().setCode(editorContent);
     }
 
     public void saveFile() {
         // 1. If file is new, then ask user, where to save this file.
         if (this.model.getFile().isNewlyCreated()) {
             System.out.println("Saving new file");
-            
+
             JFileChooser chooser = new JFileChooser();
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -51,33 +53,38 @@ public class EditorController {
                 chooser.cancelSelection();
                 return;
             }
-            
-            // b. Otherwise, if user selects a directory, get the folder path
-            //    and create a file path from it
-            String folderPath = chooser.getSelectedFile().getAbsolutePath();
-            Path filePath = Path.of(folderPath, this.model.getFileName());
 
-            // c. Create a new file at the selected location and write the
-            //    code content to the file path
+            // b. Otherwise, create the file path
+            String filePath = chooser.getSelectedFile().toString() + ".java";
+            
+            // c. Extract filename from file path
+            String[] parts = filePath.split("/");
+            String filename = parts[parts.length - 1];
+
+            // d. Create a new file at the selected location and write the
+            //    code content to the file
             try {
-                Files.createFile(filePath);
-                Files.writeString(filePath, this.model.getCode(), StandardOpenOption.WRITE);
+                Files.createFile(Path.of(filePath));
+                this.writeToFile(filePath);
+                
+                // e. Update the EditorModel with new data
+                this.model.getFile().setName(filename);
+                this.model.getFile().setPath(filePath);
+                this.model.getFile().setIsSaved(true);                
             } catch (IOException ex) {
                 Logger.getLogger(EditorController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             // 2. Otherwise, the file already exists on the user's system
-            //    So, just get the file path and write the code on that location
-            
+            //    So, just get the file path and overwrite it with new code
             System.out.println("Saving existing file");
-            try {
-                Files.writeString(Path.of(this.model.getFilePath()), this.model.getCode(), StandardOpenOption.WRITE);
-            } catch (IOException ex) {
-                Logger.getLogger(EditorController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+            
+            this.writeToFile(this.model.getFile().getPath());
+            
+            // Update the "saved" boolean to be true, since file is now saved
+            this.model.getFile().setIsSaved(true);
+            this.view.update();
         }
-        
 
     }
 
@@ -98,6 +105,14 @@ public class EditorController {
         }
     }
 
+    private void writeToFile(String path) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            writer.write(this.model.getFile().getCode());
+        } catch (IOException ex) {
+            Logger.getLogger(EditorController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private String loadFileContent(String path) {
         try {
             String fileContent = new String(Files.readAllBytes(Paths.get(path)));
@@ -109,11 +124,11 @@ public class EditorController {
     }
 
     public String getCode() {
-        return this.model.getCode();
+        return this.model.getFile().getCode();
     }
 
     public String getFilePath() {
-        return this.model.getFilePath();
+        return this.model.getFile().getPath();
     }
 
 }

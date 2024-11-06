@@ -40,16 +40,12 @@ public class EditorKeyListener implements KeyListener {
         }, 800, TimeUnit.MILLISECONDS));
         
         if (prev != null) {
-            System.out.println("cancelling...");
             prev.cancel(true);
         }
     }
 
     @Override
     public void keyPressed(KeyEvent ke) {
-        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            System.out.println("Code: " + this.controller.getCode());
-        }
     }
 
     @Override

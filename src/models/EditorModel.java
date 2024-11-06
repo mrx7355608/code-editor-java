@@ -14,33 +14,9 @@ public class EditorModel {
     public EditorModel() {
         this.file = new EditorFile();
     }
-
-    public String getCode() {
-        return this.file.getCode();
-    }
-
-    public Boolean getIsSaved() {
-        return this.file.getIsSaved();
-    }
     
     public EditorFile getFile() {
         return this.file;
-    }
-    
-    public String getFileName() {
-        return this.file.getName();
-    }
-
-    public void setCode(String code) {
-        this.file.setCode(code);
-    }
-
-    public void setIsSaved(Boolean isSaved) {
-        this.file.setIsSaved(isSaved);
-    }
-    
-    public String getFilePath() {
-        return this.file.getPath();
     }
 
     public void setFile(EditorFile file) {
