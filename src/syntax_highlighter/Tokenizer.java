@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Tokenizer {
 
-    private final ArrayList<String> tokens = new ArrayList();
+    private final ArrayList<Token> tokens = new ArrayList();
     private int start = 0;
     private int current = 0;
     private int line = 1;
@@ -14,29 +14,30 @@ public class Tokenizer {
         this.sourceCode = sourceCode;
     }
 
-    public ArrayList<String> tokenize() {
+    public ArrayList<Token> tokenize() {
 
         while (!isAtEnd()) {
+            // Move start pointer to the current pointer position after
+            // creating a token
             start = current;
 
+            // Get current character
             char c = this.currentChar();
 
-            
             /**
              * If newline character is found, then increment "lines" variable
-             * 
-             * WARNING:
-             * =======
-             * This condition should be checked first because somehow the
-             * "newline" character is also identified as a Space character
-             * 
-            */ 
+             *
+             * WARNING: ======= This condition should be checked first because
+             * somehow the "newline" character is also identified as a Space
+             * character
+             *
+             */
             if (this.isNewline(c)) {
                 line++;
                 current++;
                 continue;
             }
-            
+
             if (this.isWhitespace(c)) {
                 current++;
                 continue;
@@ -45,57 +46,67 @@ public class Tokenizer {
             // Handle brackets
             switch (c) {
                 case '(' ->
-                    this.addToken("(");
+                    this.addToken("(", TokenType.BRACKET);
                 case ')' ->
-                    this.addToken(")");
+                    this.addToken(")", TokenType.BRACKET);
                 case '[' ->
-                    this.addToken("[");
+                    this.addToken("[", TokenType.BRACKET);
                 case ']' ->
-                    this.addToken("]");
+                    this.addToken("]", TokenType.BRACKET);
                 case '{' ->
-                    this.addToken("{");
+                    this.addToken("{", TokenType.BRACKET);
                 case '}' ->
-                    this.addToken("}");
+                    this.addToken("}", TokenType.BRACKET);
             }
 
             // Handle operators
             switch (c) {
                 case '+' ->
-                    this.addToken("+");
+                    this.addToken("+", TokenType.OPERATOR);
                 case '-' ->
-                    this.addToken("-");
+                    this.addToken("-", TokenType.OPERATOR);
                 case '*' ->
-                    this.addToken("%");
+                    this.addToken("%", TokenType.OPERATOR);
                 case '%' ->
-                    this.addToken("%");
+                    this.addToken("%", TokenType.OPERATOR);
                 case '/' -> {
                     if (this.nextChar() != '/') {
-                        this.addToken("/");
+                        this.addToken("/", TokenType.OPERATOR);
                     } else {
                         this.ignoreSingleLineComment();
                     }
                 }
             }
-            
+
             // Handle comparators
             switch (c) {
                 case '>' -> {
-                    this.addToken(matchNextChar('=') ? ">=" : ">");
+                    String value = this.matchNextChar('=') ? ">=" : ">";
+                    this.addToken(value, TokenType.COMPARATOR);
                     current += 2;
                     continue;
                 }
                 case '<' -> {
-                    this.addToken(matchNextChar('=') ? "<=" : "<");
+                    String value = this.matchNextChar('=') ? "<=" : "<";
+                    this.addToken(value, TokenType.COMPARATOR);
                     current += 2;
                     continue;
                 }
                 case '=' -> {
-                    this.addToken(matchNextChar('=') ? "==" : "=");
-                    current += 2;
-                    continue;
+                    String value = matchNextChar('=') ? "==" : "=";
+
+                    if ("==".equals(value)) {
+                        this.addToken(value, TokenType.COMPARATOR);
+                        current += 2;
+                        continue;
+                    } else {
+                        this.addToken(value, TokenType.ASSIGNMENT);
+                        current++;
+                        continue;
+                    }
                 }
             }
-            
+
             // Handle String literals
             if (c == '"') {
                 this.tokenizeString();
@@ -107,7 +118,7 @@ public class Tokenizer {
             // keyword
             if (this.isAlpha(c)) {
                 this.scanKeywordOrIdentifier();
-                this.addToken();
+                this.addToken(TokenType.KEYWORD);
                 continue;
             }
 
@@ -121,42 +132,44 @@ public class Tokenizer {
     private boolean matchNextChar(char c) {
         return this.nextChar() == c;
     }
-    private void addToken() {
-        tokens.add(sourceCode.substring(start, current));
+
+    private void addToken(TokenType type) {
+        String value = sourceCode.substring(start, current);
+        Token token = new Token(value, type, line, current);
+        tokens.add(token);
     }
-    
-    private void addToken(String value) {
-        tokens.add(value);
+
+    private void addToken(String value, TokenType type) {
+        Token token = new Token(value, type, line, current);
+        tokens.add(token);
     }
 
     private char nextChar() {
         return this.sourceCode.charAt(current + 1);
     }
-    
+
     private char currentChar() {
         return sourceCode.charAt(current);
     }
 
     /**
-     * ####################
-     *     CLASSIFIERS
-     * ####################
-     * 
-     * Below functions help in identifying tokens as keywords,
-     * comments, identifiers, etc.
+     * #################### CLASSIFIERS ####################
+     *
+     * Below functions help in identifying tokens as keywords, comments,
+     * identifiers, etc.
      */
     private void ignoreSingleLineComment() {
         while (this.nextChar() != '\n') {
             this.current++;
         }
     }
-    
+
     private void scanKeywordOrIdentifier() {
         while (isAlpha(this.currentChar())) {
             current++;
         }
     }
-    
+
     private void tokenizeString() {
         // Increment so that current will point to the letter that is present
         // after the " symbol
@@ -165,21 +178,20 @@ public class Tokenizer {
         // which will create some weird tokens, so I incremented it once so that
         // "current" will point to "f" character
         current++;
-        
+
         while (this.currentChar() != '"' && !this.isAtEnd()) {
             current++;
         }
-        
-        this.addToken(sourceCode.substring(start, current + 1));
+
+        String value = sourceCode.substring(start, current + 1);
+        this.addToken(value, TokenType.STRING_LITERAL);
     }
-    
+
     /**
-     * #######################
-     *   CHARACTER DETECTORS
-     * #######################
-     * 
-     * Below functions detect whether a character is a 
-     * newline, a space, a letter or any other thing
+     * ####################### CHARACTER DETECTORS #######################
+     *
+     * Below functions detect whether a character is a newline, a space, a
+     * letter or any other thing
      */
     private boolean isNewline(char c) {
         return c == '\n';
@@ -192,15 +204,14 @@ public class Tokenizer {
     private boolean isAtEnd() {
         return current >= sourceCode.length();
     }
-    
+
     private boolean isWhitespace(char c) {
         return Character.isWhitespace(c);
     }
-    
+
     // ######################
     //        GETTERS      
     // ######################
-    
     public int getLines() {
         return this.line;
     }

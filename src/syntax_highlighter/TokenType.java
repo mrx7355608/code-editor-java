@@ -17,5 +17,7 @@ public enum TokenType {
     CHAR_LITERAL,
     DELIMETER,
     OPERATOR,
-    BRACKET
+    BRACKET,
+    COMPARATOR,
+    ASSIGNMENT
 }

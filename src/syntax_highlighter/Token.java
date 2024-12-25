@@ -20,6 +20,10 @@ public class Token {
         this.line = line;
         this.column = column;
     }
+    
+    public String getValue() {
+        return this.value;
+    }
 
     @Override
     public String toString() {
