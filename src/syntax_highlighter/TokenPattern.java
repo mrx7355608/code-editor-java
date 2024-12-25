@@ -4,17 +4,19 @@
  */
 package syntax_highlighter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  *
  * @author bugsbunny
  */
 public class TokenPattern {
-    public String pattern;
-    public TokenType type;
-
-    public TokenPattern(String pattern, TokenType type) {
-        this.pattern = pattern;
-        this.type = type;
+    public static HashMap<String, TokenType> getKeywordsMap() {
+        HashMap<String, TokenType> keywords = new HashMap();
+        
+        keywords.put("return", TokenType.KEYWORD);
+        
+        return keywords;
     }
-
 }

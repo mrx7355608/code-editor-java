@@ -16,5 +16,6 @@ public enum TokenType {
     NUMBER_LITERAL,
     CHAR_LITERAL,
     DELIMETER,
-    OPERATOR    
+    OPERATOR,
+    BRACKET
 }
