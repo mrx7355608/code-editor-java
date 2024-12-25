@@ -1,8 +1,6 @@
 
 package codeeditor;
 
-import views.MainView;
-
 
 public class CodeEditor {
 

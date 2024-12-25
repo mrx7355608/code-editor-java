@@ -4,6 +4,8 @@
  */
 package syntax_highlighter;
 
+import enums.TokenType;
+
 /**
  *
  * @author bugsbunny

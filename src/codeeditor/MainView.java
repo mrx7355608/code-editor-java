@@ -1,23 +1,19 @@
-package views;
+package codeeditor;
 
-import controllers.ConsoleController;
-import controllers.EditorController;
-import controllers.MenuController;
-import event_handlers.ConsoleMouseListener;
-import event_handlers.EditorKeyListener;
+import editor.EditorView;
+import editor.EditorController;
+import editor.EditorKeyListener;
 import java.awt.BorderLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import models.EditorModel;
+import editor.EditorModel;
 
 public class MainView extends JFrame {
-    
+
     EditorController editorController;
-    ConsoleController consoleController;
-    
 
     public MainView() {
         this.useSystemLookAndFeel();
@@ -27,10 +23,8 @@ public class MainView extends JFrame {
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setLayout(new BorderLayout());
         super.setLocationRelativeTo(null);
-        
+
         this.setupEditor();
-        this.setupConsole();
-        this.setupMenuBar();
     }
 
     private void useSystemLookAndFeel() {
@@ -44,15 +38,6 @@ public class MainView extends JFrame {
         }
     }
 
-    private void setupConsole() {
-        ConsoleView view = new ConsoleView();
-        consoleController = new ConsoleController(view);
-        ConsoleMouseListener mouseListener = new ConsoleMouseListener(consoleController, editorController);
-
-        view.addClickHandler(mouseListener);
-        super.add(view, BorderLayout.SOUTH);
-    }
-
     private void setupEditor() {
         EditorModel model = new EditorModel();
         EditorView view = new EditorView(model);
@@ -62,11 +47,5 @@ public class MainView extends JFrame {
         view.attachKeyListener(listener);
         super.add(view, BorderLayout.NORTH);
     }
-    
-    private void setupMenuBar() {
-        MenuView view = new MenuView();
-        MenuController controller = new MenuController(editorController, consoleController, view);
-        controller.addFileMenuActionHandlers();
-        super.setJMenuBar(view);
-    }
+
 }

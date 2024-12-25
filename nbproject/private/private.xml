@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/K:/Projects/code-editor-java/src/syntax_highlighter/TokenPattern.java</file>
+            <file>file:/K:/Projects/code-editor-java/src/controllers/EditorController.java</file>
             <file>file:/K:/Projects/code-editor-java/src/syntax_highlighter/Tokenizer.java</file>
+            <file>file:/K:/Projects/code-editor-java/src/syntax_highlighter/SyntaxHighlighter.java</file>
+            <file>file:/K:/Projects/code-editor-java/src/event_handlers/EditorKeyListener.java</file>
+            <file>file:/K:/Projects/code-editor-java/src/views/EditorView.java</file>
         </group>
     </open-files>
 </project-private>

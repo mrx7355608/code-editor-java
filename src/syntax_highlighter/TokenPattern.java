@@ -4,6 +4,7 @@
  */
 package syntax_highlighter;
 
+import enums.TokenType;
 import java.util.ArrayList;
 import java.util.HashMap;
 

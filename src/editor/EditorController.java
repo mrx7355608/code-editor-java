@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package controllers;
+package editor;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -17,9 +17,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
-import models.EditorFile;
-import models.EditorModel;
-import views.EditorView;
 
 /**
  *
@@ -41,10 +38,6 @@ public class EditorController {
         
         // 2. Update the code inside the editor model
         this.model.getFile().setCode(editorContent);
-    }
-    
-    public JTextPane getView() {
-        return this.view.getTextPane();
     }
 
     public void saveFile() {
@@ -129,13 +122,17 @@ public class EditorController {
             return null;
         }
     }
-
+    
     public String getCode() {
         return this.model.getFile().getCode();
     }
 
     public String getFilePath() {
         return this.model.getFile().getPath();
+    }
+    
+    public JTextPane getView() {
+        return this.view.getTextPane();
     }
 
 }

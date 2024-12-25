@@ -1,5 +1,6 @@
 package syntax_highlighter;
 
+import enums.TokenType;
 import java.util.ArrayList;
 
 public class Tokenizer {

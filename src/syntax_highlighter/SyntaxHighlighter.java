@@ -1,6 +1,7 @@
 
 package syntax_highlighter;
 
+import enums.TokenType;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -10,7 +11,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import static syntax_highlighter.TokenType.KEYWORD;
+import static enums.TokenType.KEYWORD;
 
 
 public class SyntaxHighlighter {
@@ -20,12 +21,9 @@ public class SyntaxHighlighter {
         String text=  textPane.getText();
         text = text.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
         ArrayList<Token> tokens = tokenizer.tokenize(text);
-        for (Token token : tokens) {
-            System.out.println(token.toString());
-        }
         
-        StyledDocument sd = (StyledDocument) textPane.getDocument();
-    
+        StyledDocument sd = textPane.getStyledDocument();
+        
         Style style = textPane.addStyle("Keyword", null);
         StyleConstants.setForeground(style, Color.RED);
         
