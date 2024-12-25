@@ -12,21 +12,28 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+import syntax_highlighter.SyntaxHighlighter;
 
 /**
  *
  * @author ghost
  */
 public class EditorKeyListener implements KeyListener {
-    
+
     private final EditorController controller;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final ConcurrentHashMap<Object, Future<?>> delayedMap = new ConcurrentHashMap<>();
-    
+    private final SyntaxHighlighter syntaxHighlighter;
+
     public EditorKeyListener(EditorController controller) {
         this.controller = controller;
+        this.syntaxHighlighter = new SyntaxHighlighter();
     }
-    
 
     @Override
     public void keyTyped(KeyEvent ke) {
@@ -34,11 +41,12 @@ public class EditorKeyListener implements KeyListener {
         final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
             try {
                 this.controller.updateCode();
+                this.syntaxHighlighter.highlight(controller.getCode(), controller.getView());
             } finally {
                 delayedMap.remove("test");
             }
-        }, 800, TimeUnit.MILLISECONDS));
-        
+        }, 300, TimeUnit.MILLISECONDS));
+
         if (prev != null) {
             prev.cancel(true);
         }
@@ -51,5 +59,5 @@ public class EditorKeyListener implements KeyListener {
     @Override
     public void keyReleased(KeyEvent ke) {
     }
-    
+
 }

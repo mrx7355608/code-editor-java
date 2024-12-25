@@ -4,18 +4,16 @@ import java.util.ArrayList;
 
 public class Tokenizer {
 
-    private final ArrayList<Token> tokens = new ArrayList();
+    private ArrayList<Token> tokens = new ArrayList();
     private int start = 0;
     private int current = 0;
     private int line = 1;
-    private final String sourceCode;
+    private String sourceCode;
 
-    public Tokenizer(String sourceCode) {
+    public ArrayList<Token> tokenize(String sourceCode) {
         this.sourceCode = sourceCode;
-    }
-
-    public ArrayList<Token> tokenize() {
-
+        this.reset();
+        
         while (!isAtEnd()) {
             // Move start pointer to the current pointer position after
             // creating a token
@@ -34,11 +32,13 @@ public class Tokenizer {
              */
             if (this.isNewline(c)) {
                 line++;
+                System.out.println("newline detected at: " + current);
                 current++;
                 continue;
             }
 
             if (this.isWhitespace(c)) {
+                System.out.println("space detected at: " + current);
                 current++;
                 continue;
             }
@@ -128,6 +128,13 @@ public class Tokenizer {
 
         return tokens;
     }
+    
+    public void reset() {
+        this.line = 1;
+        this.current = 0;
+        this.start = 0;
+        this.tokens = new ArrayList();
+    }
 
     private boolean matchNextChar(char c) {
         return this.nextChar() == c;
@@ -135,12 +142,12 @@ public class Tokenizer {
 
     private void addToken(TokenType type) {
         String value = sourceCode.substring(start, current);
-        Token token = new Token(value, type, line, current);
+        Token token = new Token(value, type, line, start);
         tokens.add(token);
     }
 
     private void addToken(String value, TokenType type) {
-        Token token = new Token(value, type, line, current);
+        Token token = new Token(value, type, line, start);
         tokens.add(token);
     }
 
@@ -194,7 +201,7 @@ public class Tokenizer {
      * letter or any other thing
      */
     private boolean isNewline(char c) {
-        return c == '\n';
+        return c == '\n' || c == '\r';
     }
 
     private boolean isAlpha(char c) {

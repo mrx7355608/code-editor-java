@@ -22,7 +22,7 @@ public class MainView extends JFrame {
     public MainView() {
         this.useSystemLookAndFeel();
 
-        super.setSize(800, 700);
+        super.setSize(1000, 700);
         super.setTitle("Hello");
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setLayout(new BorderLayout());

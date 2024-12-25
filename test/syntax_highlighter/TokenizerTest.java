@@ -8,6 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TokenizerTest {
+    Tokenizer instance = new Tokenizer();
 
     @Test
     public void testKeywordsAndIdentifiers() {
@@ -19,8 +20,7 @@ public class TokenizerTest {
                       }
                       """;
 
-        Tokenizer instance = new Tokenizer(code);
-        ArrayList<Token> result = instance.tokenize();
+        ArrayList<Token> result = instance.tokenize(code);
 
         assertEquals("class", result.get(0).value);
         assertEquals("Main", result.get(1).value);
@@ -37,8 +37,7 @@ public class TokenizerTest {
                       class Main {}
                       """;
 
-        Tokenizer instance = new Tokenizer(code);
-        ArrayList<Token> result = instance.tokenize();
+        ArrayList<Token> result = instance.tokenize(code);
         
         List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
         // Using regular Array here cuz it's easy to write
@@ -53,8 +52,8 @@ public class TokenizerTest {
                       if (a > b) {}
                       else {}
                       """;
-        Tokenizer instance = new Tokenizer(code);
-        ArrayList<Token> result = instance.tokenize();
+        
+        ArrayList<Token> result = instance.tokenize(code);
         List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
         List<String> expTokense = List.of(
                 "if", "(", "a", ">", "b", ")", "{", "}",
@@ -69,8 +68,8 @@ public class TokenizerTest {
                       int sum = a + b;
                       int sub = a - b;
                       """;
-        Tokenizer instance = new Tokenizer(code);
-        ArrayList<Token> result = instance.tokenize();
+        
+        ArrayList<Token> result = instance.tokenize(code);
         List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
         List<String> expTokense = List.of(
                 "int", "sum", "=", "a", "+", "b",
@@ -85,8 +84,8 @@ public class TokenizerTest {
                       int sum = a + b;
                       String name = "fawad";
                       """;
-        Tokenizer instance = new Tokenizer(code);
-        ArrayList<Token> result = instance.tokenize();
+
+        ArrayList<Token> result = instance.tokenize(code);
         List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
         List<String> expTokense = List.of(
                 "int", "sum", "=", "a", "+", "b",
@@ -104,8 +103,8 @@ public class TokenizerTest {
                       else if (sum == b) {}
                       a = b;
                       """;
-        Tokenizer instance = new Tokenizer(code);
-        ArrayList<Token> result = instance.tokenize();
+        
+        ArrayList<Token> result = instance.tokenize(code);
         List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
         List<String> expTokense = List.of(
                 "int", "sum", "=", "a", "+", "b",
@@ -126,8 +125,7 @@ public class TokenizerTest {
                           public static void main() {}
                       }""";
 
-        Tokenizer instance = new Tokenizer(code);
-        instance.tokenize();
+        instance.tokenize(code);
 
         int expResult = 4;
         int result = instance.getLines();

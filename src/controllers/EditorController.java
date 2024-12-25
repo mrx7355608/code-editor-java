@@ -13,7 +13,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import models.EditorFile;
 import models.EditorModel;
 import views.EditorView;
@@ -38,6 +41,10 @@ public class EditorController {
         
         // 2. Update the code inside the editor model
         this.model.getFile().setCode(editorContent);
+    }
+    
+    public JTextPane getView() {
+        return this.view.getTextPane();
     }
 
     public void saveFile() {
