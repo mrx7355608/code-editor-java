@@ -14,7 +14,10 @@ import javax.swing.JMenuItem;
  */
 public class Menu extends JMenuBar {
 
-    public Menu() {
+    private final MainController mainController;
+    
+    public Menu(MainController mainController) {
+        this.mainController = mainController;
         super.add(this.createFileMenu());
         super.add(this.createEditMenu());
         super.add(this.createRunMenu());

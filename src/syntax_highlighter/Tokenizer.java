@@ -12,7 +12,7 @@ public class Tokenizer {
     private int current = 0;
     private int line = 1;
     private String sourceCode;
-    private final String keywordRegex = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|if|implements|import|instanceof|int|interface|long|native|new|package|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while)\\b";
+    private final String keywordRegex = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|if|implements|import|instanceof|int|String|interface|long|native|new|package|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while)\\b";
     private final String accessModifierRegex = "\\b(public|protected|private)\\b";
 
     public ArrayList<Token> tokenize(String sourceCode) {
