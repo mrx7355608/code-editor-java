@@ -1,51 +1,39 @@
 package codeeditor;
 
-import editor.EditorView;
-import editor.EditorController;
-import editor.EditorKeyListener;
 import java.awt.BorderLayout;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import editor.EditorModel;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.KeyListener;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
 
-public class MainView extends JFrame {
+public class MainView extends JPanel {
 
-    EditorController editorController;
+    private final JTextPane editor;
 
     public MainView() {
-        this.useSystemLookAndFeel();
-
-        super.setSize(1000, 700);
-        super.setTitle("Hello");
-        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        editor = new JTextPane();
+        editor.setCaretColor(Color.white);
+        editor.setForeground(Color.white);
+        editor.setFont(new Font("Courier New", Font.PLAIN, 18));
+        editor.setBackground(new Color(20,20,20));
+        super.setBackground(Color.red);
         super.setLayout(new BorderLayout());
-        super.setLocationRelativeTo(null);
-
-        this.setupEditor();
+        super.add(editor, BorderLayout.CENTER);
     }
-
-    private void useSystemLookAndFeel() {
-        // Adjusts editor styles according to the system styles, meaning
-        // Window type buttons, textbox etc on Windows machines.
-        // Linux type stuff on Linux machines.
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    
+    public void attachKeyListener(KeyListener listener) {
+        this.editor.addKeyListener(listener);
     }
-
-    private void setupEditor() {
-        EditorModel model = new EditorModel();
-        EditorView view = new EditorView(model);
-        editorController = new EditorController(view, model);
-        EditorKeyListener listener = new EditorKeyListener(editorController);
-
-        view.attachKeyListener(listener);
-        super.add(view, BorderLayout.NORTH);
+    
+    public String getEditorContent() {
+        return this.editor.getText();
     }
-
+    
+    public JTextPane getTextPane() {
+        return this.editor;
+    }
+    
 }

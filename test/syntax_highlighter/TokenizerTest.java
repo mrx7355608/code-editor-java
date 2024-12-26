@@ -115,6 +115,23 @@ public class TokenizerTest {
                 );
         assertEquals(expTokense, resultString);
     }
+    
+    @Test
+    public void testNumbers() {
+        System.out.println("Should tokenize integers and float numbers");
+        String code = """
+                      int a = 56;
+                      int b = 71.4;
+                      """;
+        
+        ArrayList<Token> result = instance.tokenize(code);
+        List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
+        List<String> expTokense = List.of(
+                "int", "a", "=", "56",
+                "int", "b", "=", "71.4"
+                );
+        assertEquals(expTokense, resultString);
+    }
 
     @Test
     public void testGetLines() {

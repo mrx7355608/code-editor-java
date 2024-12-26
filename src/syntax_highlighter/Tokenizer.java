@@ -1,7 +1,9 @@
 package syntax_highlighter;
 
-import enums.TokenType;
+import utils.TokenType;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Tokenizer {
 
@@ -10,11 +12,13 @@ public class Tokenizer {
     private int current = 0;
     private int line = 1;
     private String sourceCode;
+    private final String keywordRegex = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|if|implements|import|instanceof|int|interface|long|native|new|package|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while)\\b";
+    private final String accessModifierRegex = "\\b(public|protected|private)\\b";
 
     public ArrayList<Token> tokenize(String sourceCode) {
         this.sourceCode = sourceCode;
         this.reset();
-        
+
         while (!isAtEnd()) {
             // Move start pointer to the current pointer position after
             // creating a token
@@ -33,13 +37,11 @@ public class Tokenizer {
              */
             if (this.isNewline(c)) {
                 line++;
-                System.out.println("newline detected at: " + current);
                 current++;
                 continue;
             }
 
             if (this.isWhitespace(c)) {
-                System.out.println("space detected at: " + current);
                 current++;
                 continue;
             }
@@ -115,11 +117,17 @@ public class Tokenizer {
                 continue;
             }
 
+            // Handle number literals
+            if (isDigit(c)) {
+                this.scanNumber();
+                current++;
+                continue;
+            }
+
             // If a letter is found, then check if it's an identifier or a
             // keyword
             if (this.isAlpha(c)) {
                 this.scanKeywordOrIdentifier();
-                this.addToken(TokenType.KEYWORD);
                 continue;
             }
 
@@ -129,7 +137,7 @@ public class Tokenizer {
 
         return tokens;
     }
-    
+
     public void reset() {
         this.line = 1;
         this.current = 0;
@@ -139,12 +147,6 @@ public class Tokenizer {
 
     private boolean matchNextChar(char c) {
         return this.nextChar() == c;
-    }
-
-    private void addToken(TokenType type) {
-        String value = sourceCode.substring(start, current);
-        Token token = new Token(value, type, line, start);
-        tokens.add(token);
     }
 
     private void addToken(String value, TokenType type) {
@@ -176,6 +178,27 @@ public class Tokenizer {
         while (isAlpha(this.currentChar())) {
             current++;
         }
+
+        String word = this.sourceCode.substring(start, current);
+        Matcher m1 = Pattern.compile(keywordRegex).matcher(word);
+        Matcher m2 = Pattern.compile(accessModifierRegex).matcher(word);
+        if (m1.matches()) {
+            this.addToken(word, TokenType.KEYWORD);
+        } else if (m2.matches()) {
+            this.addToken(word, TokenType.ACCESS_MODIFIER);
+        } else {
+            this.addToken(word, TokenType.IDENTIFIER);
+        }
+    }
+
+    private void scanNumber() {
+        while ((this.isDigit(this.currentChar()) 
+                || this.isDecimal(this.currentChar()))
+                && !this.isAtEnd()) {
+            current++;
+        }
+        String numberStr = this.sourceCode.substring(start, current);
+        this.addToken(numberStr, TokenType.NUMBER_LITERAL);
     }
 
     private void tokenizeString() {
@@ -215,6 +238,14 @@ public class Tokenizer {
 
     private boolean isWhitespace(char c) {
         return Character.isWhitespace(c);
+    }
+
+    private boolean isDigit(char c) {
+        return Character.isDigit(c);
+    }
+
+    private boolean isDecimal(char c) {
+        return c == '.';
     }
 
     // ######################

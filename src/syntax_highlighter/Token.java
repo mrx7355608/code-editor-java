@@ -4,7 +4,7 @@
  */
 package syntax_highlighter;
 
-import enums.TokenType;
+import utils.TokenType;
 
 /**
  *

@@ -3,25 +3,25 @@ package themes;
 
 import java.awt.Color;
 import java.util.HashMap;
-import enums.TokenType;
+import static utils.TokenType.*;
 
 
 public class Theme {
-    public static HashMap<TokenType, Color> hope() {
-        HashMap<TokenType, Color> theme = new HashMap();
+    public static HashMap<String, Color> hope() {
+        HashMap<String, Color> theme = new HashMap();
         
-        theme.put(TokenType.KEYWORD, Color.BLUE);
-        theme.put(TokenType.ACCESS_MODIFIER, Color.ORANGE);
-        theme.put(TokenType.ASSIGNMENT, Color.WHITE);
+        theme.put(KEYWORD.toString(), Color.RED);
+        theme.put(ACCESS_MODIFIER.toString(), Color.ORANGE);
+        theme.put(ASSIGNMENT.toString(), Color.WHITE);
         
-        theme.put(TokenType.BRACKET, Color.LIGHT_GRAY);
-        theme.put(TokenType.COMPARATOR, Color.CYAN);
-        theme.put(TokenType.OPERATOR, Color.WHITE);
+        theme.put(BRACKET.toString(), Color.LIGHT_GRAY);
+        theme.put(COMPARATOR.toString(), Color.CYAN);
+        theme.put(OPERATOR.toString(), Color.MAGENTA);
         
-        theme.put(TokenType.STRING_LITERAL, Color.GREEN);
-        theme.put(TokenType.NUMBER_LITERAL, Color.MAGENTA);
-        theme.put(TokenType.CHAR_LITERAL, Color.GREEN);
-        theme.put(TokenType.IDENTIFIER, Color.WHITE);
+        theme.put(STRING_LITERAL.toString(), Color.GREEN);
+        theme.put(NUMBER_LITERAL.toString(), Color.MAGENTA);
+        theme.put(CHAR_LITERAL.toString(), Color.GREEN);
+        theme.put(IDENTIFIER.toString(), Color.WHITE);
         
         return theme;
     }
