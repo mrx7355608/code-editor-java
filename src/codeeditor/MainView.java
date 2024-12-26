@@ -2,14 +2,13 @@ package codeeditor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.KeyListener;
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneLayout;
 
-public class MainView extends JPanel {
+public class MainView extends JScrollPane {
 
     private final JTextPane editor;
 
@@ -20,8 +19,8 @@ public class MainView extends JPanel {
         editor.setFont(new Font("Courier New", Font.PLAIN, 18));
         editor.setBackground(new Color(20,20,20));
         super.setBackground(Color.red);
-        super.setLayout(new BorderLayout());
-        super.add(editor, BorderLayout.CENTER);
+        super.setLayout(new ScrollPaneLayout());
+        super.setViewportView(editor);
     }
     
     public void attachKeyListener(KeyListener listener) {
