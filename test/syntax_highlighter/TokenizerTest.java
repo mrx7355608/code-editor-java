@@ -31,9 +31,10 @@ public class TokenizerTest {
 
     @Test
     public void testSingleLineComments() {
-        System.out.println("Should ignore single line comments");
+        System.out.println("Should tokenize single line comments");
         String code = """
                       // this is a comment
+                      // this is another comment
                       class Main {}
                       """;
 
@@ -41,7 +42,48 @@ public class TokenizerTest {
         
         List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
         // Using regular Array here cuz it's easy to write
-        String[] expTokens = {"class", "Main", "{", "}"};
+        String[] expTokens = {"// this is a comment", "// this is another comment", "class", "Main", "{", "}"};
+        assertEquals(Arrays.asList(expTokens), resultString);
+    }
+    
+    @Test
+    public void testMultiLineComments() {
+        System.out.println("Should tokenize multi line comments");
+        String code = """
+                      /** 
+                      * this is a multi
+                      * line comment that
+                      * tokenizer should ignore
+                      */
+                      class Main {}
+                      """;
+
+        ArrayList<Token> result = instance.tokenize(code);
+        
+        List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
+        // Using regular Array here cuz it's easy to write
+        String[] expTokens = {"/**\n* this is a multi\n* line comment that\n* tokenizer should ignore\n*/", "class", "Main", "{", "}"};
+        assertEquals(Arrays.asList(expTokens), resultString);
+    }
+    
+    @Test
+    public void testAlphaNumericIdentifiers() {
+        System.out.println("Should identify alpha-numeric words as a single token");
+        String code = """
+                      class Main {
+                        public void method1() {}
+                        public void method2() { String value1; }
+                      }
+                      """;
+
+        ArrayList<Token> result = instance.tokenize(code);
+        
+        List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
+        // Using regular Array here cuz it's easy to write
+        String[] expTokens = {"class", "Main", "{",
+            "public", "void", "method1", "(", ")", "{", "}",
+            "public", "void", "method2", "(", ")", "{", "String", "value1",  "}", "}",
+        };
         assertEquals(Arrays.asList(expTokens), resultString);
     }
 
@@ -91,6 +133,23 @@ public class TokenizerTest {
                 "int", "sum", "=", "a", "+", "b",
                 "String", "name", "=", "\"fawad\"");
         assertEquals(expTokense, resultString);
+    }
+    
+    @Test
+    public void testCharLiterals() {
+        System.out.println("Should tokenize char literals");
+        String code = """
+                      int sum = 4;
+                      char grade = 'A';
+                      """;
+
+        ArrayList<Token> result = instance.tokenize(code);
+        List<String> resultString = result.stream().map(Token::getValue).collect(Collectors.toList());
+        List<String> expTokense = List.of(
+                "int", "sum", "=", "4",
+                "char", "grade", "=", "'A'");
+        assertEquals(expTokense, resultString);
+
     }
     
     @Test

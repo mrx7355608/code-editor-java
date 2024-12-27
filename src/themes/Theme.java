@@ -23,6 +23,8 @@ public class Theme {
         theme.put(CHAR_LITERAL.toString(), Color.GREEN);
         theme.put(IDENTIFIER.toString(), Color.WHITE);
         
+        theme.put(COMMENT.toString(), Color.GRAY);
+        
         return theme;
     }
 }

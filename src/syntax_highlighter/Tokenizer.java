@@ -73,10 +73,13 @@ public class Tokenizer {
                 case '%' ->
                     this.addToken("%", TokenType.OPERATOR);
                 case '/' -> {
-                    if (this.nextChar() != '/') {
-                        this.addToken("/", TokenType.OPERATOR);
-                    } else {
-                        this.ignoreSingleLineComment();
+                    switch (this.nextChar()) {
+                        case '/' ->
+                            this.tokenizeSingleLineComment();
+                        case '*' -> 
+                            this.tokenizeMultiLineComment();
+                        default ->
+                            this.addToken("/", TokenType.OPERATOR);
                     }
                 }
             }
@@ -112,7 +115,14 @@ public class Tokenizer {
 
             // Handle String literals
             if (c == '"') {
-                this.tokenizeString();
+                this.tokenizeStringLiteral();
+                current++;
+                continue;
+            }
+            
+            // Handle Char literals
+            if (c == '\'') {
+                this.tokenizeCharLiteral();
                 current++;
                 continue;
             }
@@ -120,14 +130,13 @@ public class Tokenizer {
             // Handle number literals
             if (isDigit(c)) {
                 this.scanNumber();
-                current++;
                 continue;
             }
 
             // If a letter is found, then check if it's an identifier or a
             // keyword
             if (this.isAlpha(c)) {
-                this.scanKeywordOrIdentifier();
+                this.scanWord();
                 continue;
             }
 
@@ -168,17 +177,32 @@ public class Tokenizer {
      * Below functions help in identifying tokens as keywords, comments,
      * identifiers, etc.
      */
-    private void ignoreSingleLineComment() {
+    private void tokenizeSingleLineComment() {
         while (this.nextChar() != '\n') {
             this.current++;
         }
+        
+        String value = this.sourceCode.substring(start, current + 1);
+        this.addToken(value, TokenType.COMMENT);
+    }
+    
+    private void tokenizeMultiLineComment() {
+        current++;
+        while (this.currentChar() != '/' && !this.isAtEnd()) {
+            if (this.isNewline(this.currentChar())) line++;
+            this.current++;
+        }
+        
+        String value = this.sourceCode.substring(start, current + 1);
+        this.addToken(value, TokenType.COMMENT);
     }
 
-    private void scanKeywordOrIdentifier() {
-        while (isAlpha(this.currentChar())) {
+    private void scanWord() {
+        while (isAlpha(this.currentChar()) || this.isDigit(this.currentChar())) {
             current++;
         }
 
+        // Classify word as keyword or access_modif, or an identifier
         String word = this.sourceCode.substring(start, current);
         Matcher m1 = Pattern.compile(keywordRegex).matcher(word);
         Matcher m2 = Pattern.compile(accessModifierRegex).matcher(word);
@@ -192,7 +216,7 @@ public class Tokenizer {
     }
 
     private void scanNumber() {
-        while ((this.isDigit(this.currentChar()) 
+        while ((this.isDigit(this.currentChar())
                 || this.isDecimal(this.currentChar()))
                 && !this.isAtEnd()) {
             current++;
@@ -201,7 +225,7 @@ public class Tokenizer {
         this.addToken(numberStr, TokenType.NUMBER_LITERAL);
     }
 
-    private void tokenizeString() {
+    private void tokenizeStringLiteral() {
         // Increment so that current will point to the letter that is present
         // after the " symbol
         // Example: "fawad"
@@ -216,6 +240,16 @@ public class Tokenizer {
 
         String value = sourceCode.substring(start, current + 1);
         this.addToken(value, TokenType.STRING_LITERAL);
+    }
+    
+    private void tokenizeCharLiteral() {
+        current++;
+        while (this.currentChar() != '\'' && !this.isAtEnd()) {
+            current++;
+        }
+        
+        String value = this.sourceCode.substring(start, current + 1);
+        this.addToken(value, TokenType.CHAR_LITERAL);
     }
 
     /**

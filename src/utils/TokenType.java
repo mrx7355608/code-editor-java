@@ -19,7 +19,8 @@ public enum TokenType {
     OPERATOR,
     BRACKET,
     COMPARATOR,
-    ASSIGNMENT;
+    ASSIGNMENT,
+    COMMENT;
     
     @Override
     public String toString() {

@@ -1,6 +1,5 @@
 package codeeditor;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyListener;
@@ -17,8 +16,7 @@ public class MainView extends JScrollPane {
         editor.setCaretColor(Color.white);
         editor.setForeground(Color.white);
         editor.setFont(new Font("Courier New", Font.PLAIN, 18));
-        editor.setBackground(new Color(20,20,20));
-        super.setBackground(Color.red);
+        editor.setBackground(new Color(50,50,50));
         super.setLayout(new ScrollPaneLayout());
         super.setViewportView(editor);
     }
