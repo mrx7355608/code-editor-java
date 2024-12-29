@@ -3,10 +3,13 @@ package codeeditor;
 import editor.EditorController;
 import editor.EditorModel;
 import editor.EditorView;
+import file_handling.FileController;
+import file_handling.FileView;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import keyboard_shortcuts.KeyboardShortcuts;
 
 public class CodeEditor extends JFrame {
 
@@ -19,17 +22,29 @@ public class CodeEditor extends JFrame {
         super.setLayout(new BorderLayout());
         super.setLocationRelativeTo(null);
         super.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        // Main Controller setup
+
+        // Editor setup
         EditorModel model = new EditorModel();
         EditorView view = new EditorView();
-        EditorController mainController = new EditorController(view, model);
+        EditorController editorController = new EditorController(view, model);
         super.add(view, BorderLayout.CENTER);
+        
+        // FileIO setup
+        FileView fileView = new FileView();
+        FileController fileController = new FileController(fileView);
+        
+        // Main controller setup
+        MainController mainController = new MainController(editorController, fileController);
+        
+        // Keyboard shortcuts setup
+        super.addKeyListener(new KeyboardShortcuts(mainController));
         
         // JMenu Setup
         Menu menu = new Menu(mainController);
         super.setJMenuBar(menu);
         
+        super.setFocusable(true);
+        super.requestFocusInWindow();
     }
     
     private void useSystemLookAndFeel() {

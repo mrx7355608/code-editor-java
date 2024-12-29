@@ -4,7 +4,8 @@
  */
 package codeeditor;
 
-import editor.EditorController;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -15,9 +16,9 @@ import javax.swing.JMenuItem;
  */
 public class Menu extends JMenuBar {
 
-    private final EditorController mainController;
+    private final MainController mainController;
     
-    public Menu(EditorController mainController) {
+    public Menu(MainController mainController) {
         this.mainController = mainController;
         super.add(this.createFileMenu());
         super.add(this.createEditMenu());
@@ -32,6 +33,9 @@ public class Menu extends JMenuBar {
         JMenuItem item3 = new JMenuItem("Save");
         JMenuItem item4 = new JMenuItem("Save As");
         JMenuItem item5 = new JMenuItem("Close");
+        item2.addActionListener((ActionEvent e) -> {
+            this.mainController.fileController.openFile();
+        });
         fileMenu.add(item1);
         fileMenu.add(item2);
         fileMenu.add(item3);
@@ -81,4 +85,5 @@ public class Menu extends JMenuBar {
 
         return optionsMenu;
     }
+    
 }
