@@ -10,74 +10,49 @@ package editor;
  * @author ghost
  */
 public class EditorModel {
-    private String name;
-    private String path;
-    private String code;
-    private Boolean isSaved;
-    
-    public EditorModel() {
-        this.name = "Untitled.java";
-        this.path = null;
-        this.code = this.getSampleCode();
-        this.isSaved = false;
-    }
-    
-    public EditorModel(String name, String path) {
-        this.name = name;
-        this.path = path;
-        this.code = this.getSampleCode();
-        this.isSaved = false;
-    }
-
-    public EditorModel(String name, String path, String code) {
-        this.name = name;
-        this.path = path;
-        this.code = code;
-    }
+    private EditorFile file;
 
     public String getName() {
-        return name;
+        return this.file.getName();
     }
 
     public String getPath() {
-        return path;
+        return this.file.getPath();
     }
 
     public String getCode() {
-        return code;
+        return this.file.getCode();
     }
 
     public Boolean getIsSaved() {
-        return isSaved;
+        return this.file.isSaved();
+    }
+    
+    public EditorFile getFile() {
+        return this.file;
+    }
+    
+    public void setFile(EditorFile file) {
+        this.file = file;
     }
     
     public Boolean isNewlyCreated() {
-        return this.path == null;
+        return this.file.getPath() == null;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.file.setName(name);
     }
 
     public void setPath(String path) {
-        this.path = path;
+        this.file.setPath(path);
     }
 
     public void setCode(String code) {
-        this.code = code;
+        this.file.setCode(code);
     }
 
     public void setIsSaved(Boolean isSaved) {
-        this.isSaved = isSaved;
-    }
-    
-    private String getSampleCode() {
-        StringBuilder sampleCode = new StringBuilder();
-        sampleCode.append("class HelloWorld {\n");
-        sampleCode.append("    public static void main(String[] args) {\n");
-        sampleCode.append("        System.out.println(\"Hello World\");\n");
-        sampleCode.append("    }\n");
-        sampleCode.append("}\n");
-        return sampleCode.toString();
+        this.file.setSaved(isSaved);
     }
 }

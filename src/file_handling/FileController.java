@@ -1,5 +1,6 @@
 package file_handling;
 
+import editor.EditorFile;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,7 +9,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,58 +20,61 @@ public class FileController {
     public FileController(FileView view) {
         this.view = view;
     }
-
-    public File createNewFile(String path) {
-        File newFile = this.view.showSaveFileDialogueBox();
-        return newFile;
+    
+    public EditorFile createNewFile() {
+        EditorFile file = new EditorFile();
+        return file;
     }
 
-    public void saveFile(String path, String newData) {
-        try {
-            // 1. If file exists, save the content
-            if (this.fileExists(path)) {
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-                    writer.write(newData);
-                }
-                return;
-            }
-
-            // 2. Otherwise, create a new file and save content in it
-            File newFile = this.createNewFile(path);
-            if (newFile != null) {
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-                    writer.write(newData);
-                }
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+    public boolean saveFile(EditorFile file) {
+        String path = file.getPath();
+        String newData = file.getCode();
+        
+        // 1. If file exists, save the content
+        if (this.fileExists(path)) {
+            System.out.println("Saving existing file");
+            this.writeToFile(path, newData);
+            return true;
         }
+
+        System.out.println("Creating new file...");
+        // 2. Otherwise, ask user where to save new file and save content in it
+        File selectedFile = this.view.showSaveFileDialogueBox();
+        if (selectedFile != null) {
+            this.writeToFile(path, newData);
+            return true;
+        }
+
+        return false;
+
     }
 
-    public String openFile() {
+    public EditorFile openFile() {
         try {
             // Show Open file UI
             File selectedFile = this.view.showOpenFileDialogueBox();
             if (selectedFile == null) {
                 return null;
             }
+
+            // Extract file details
+            String path = selectedFile.getAbsolutePath();
+            String name = selectedFile.getName();
             
             // Create a file reader
-            String path = selectedFile.getAbsolutePath();
             BufferedReader reader = new BufferedReader(new FileReader(path));
             StringBuilder fileData = new StringBuilder();
 
-            // Start reading lines from the file
+            // Read the file content
             String line = reader.readLine();
-
-            // Read until end of the file
             while (line != null) {
-                fileData.append(line);
+                fileData.append(line).append('\n');
                 line = reader.readLine();
             }
-
-            return fileData.toString();
+            
+            // Create an EditorFile instnace for ease of handling
+            EditorFile file = new EditorFile(name, path, fileData.toString(), true);
+            return file;
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,6 +88,20 @@ public class FileController {
     }
 
     private boolean fileExists(String path) {
-        return path == null || Files.exists(Paths.get(path));
+        if (path == null) {
+            return false;
+        } else if (!Files.exists(Paths.get(path))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void writeToFile(String path, String newData) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            writer.write(newData);
+        } catch (IOException ex) {
+            Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

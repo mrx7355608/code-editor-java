@@ -1,16 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package file_handling;
 
 import java.io.File;
 import javax.swing.JFileChooser;
 
-/**
- *
- * @author bugsbunny
- */
+
 public class FileView {
     private final JFileChooser fileChooser;
     
@@ -42,5 +36,4 @@ public class FileView {
         
         return null;
     }
-    
 }
