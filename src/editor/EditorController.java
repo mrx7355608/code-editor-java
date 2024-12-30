@@ -19,7 +19,6 @@ import javax.swing.text.StyleConstants;
 import syntax_highlighter.SyntaxHighlightController;
 import themes.Theme;
 
-
 public class EditorController {
 
     private final EditorView view;
@@ -43,7 +42,8 @@ public class EditorController {
                 // 1. After a certain delay, add the buffer to EditorModel's "code" field
                 final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
                     try {
-                        saveCodeInModel();
+                        String editorContent = view.getEditorContent();
+                        model.setCode(editorContent);
                         syntaxHighlighter.highlight();
                     } finally {
                         delayedMap.remove("test");
@@ -77,34 +77,17 @@ public class EditorController {
         });
     }
 
-    public void saveCodeInModel() {
-        String editorContent = this.view.getEditorContent();
-        this.model.setCode(editorContent);
-    }
-    
-    public void updateCode(String code) {
-        this.model.setCode(code);
-    }
-    
     public void updateUI() {
         String code = this.model.getCode();
         this.view.getTextPane().setText(code);
         this.syntaxHighlighter.highlight();
     }
 
-    public String getCode() {
-        return this.model.getCode();
-    }
-    
     public EditorFile getFile() {
         return this.model.getFile();
     }
-    
+
     public void setFile(EditorFile file) {
         this.model.setFile(file);
-    }
-    
-    public String getFileName() {
-        return this.model.getName();
     }
 }
