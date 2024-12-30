@@ -4,6 +4,8 @@
  */
 package editor;
 
+import core.Stack;
+import core.UndoRedoManager;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -26,6 +28,9 @@ public class EditorController {
     private final SyntaxHighlightController syntaxHighlighter;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final ConcurrentHashMap<Object, Future<?>> delayedMap = new ConcurrentHashMap<>();
+    private final UndoRedoManager undoRedoHandler = UndoRedoManager.getInstance();
+    private final Stack undoStack = undoRedoHandler.getUndoStack();
+    private final Stack redoStack = undoRedoHandler.getRedoStack();
 
     public EditorController(EditorView view, EditorModel model) {
         this.view = view;
@@ -43,8 +48,10 @@ public class EditorController {
                 final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
                     try {
                         String editorContent = view.getEditorContent();
-                        model.setCode(editorContent);
+//                        model.setCode(editorContent);
                         syntaxHighlighter.highlight();
+                        System.out.println(editorContent);
+                        undoStack.push(editorContent);
                     } finally {
                         delayedMap.remove("test");
                     }
@@ -89,5 +96,9 @@ public class EditorController {
 
     public void setFile(EditorFile file) {
         this.model.setFile(file);
+    }
+    
+    public EditorModel getModel() {
+        return this.model;
     }
 }

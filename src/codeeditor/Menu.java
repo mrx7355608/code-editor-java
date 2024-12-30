@@ -4,6 +4,8 @@
  */
 package codeeditor;
 
+import core.Stack;
+import core.UndoRedoManager;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -16,7 +18,10 @@ import javax.swing.JMenuItem;
 public class Menu extends JMenuBar {
 
     private final MainController mainController;
-    
+    private final UndoRedoManager undoRedoHandler = UndoRedoManager.getInstance();
+    private final Stack undoStack = undoRedoHandler.getUndoStack();
+    private final Stack redoStack = undoRedoHandler.getRedoStack();
+
     public Menu(MainController mainController) {
         this.mainController = mainController;
         super.add(this.createFileMenu());
@@ -32,7 +37,7 @@ public class Menu extends JMenuBar {
         JMenuItem item3 = new JMenuItem("Save");
         JMenuItem item4 = new JMenuItem("Save As");
         JMenuItem item5 = new JMenuItem("Close");
-        
+
         item1.addActionListener((ActionEvent e) -> {
             this.mainController.newFile();
         });
@@ -60,6 +65,24 @@ public class Menu extends JMenuBar {
         JMenuItem item5 = new JMenuItem("Undo");
         JMenuItem item6 = new JMenuItem("Redo");
 
+        item5.addActionListener((ActionEvent e) -> {
+            this.undoStack.pop();
+            String newData = this.undoStack.peek().data;
+
+            if (newData == null) {
+                this.mainController.editorController.getModel().setCode("");
+                this.mainController.editorController.updateUI();
+                return;
+            }
+            
+            this.mainController.editorController.getModel().setCode(newData);
+            this.mainController.editorController.updateUI();
+
+        });
+        item6.addActionListener((ActionEvent e) -> {
+            this.mainController.saveFile();
+        });
+
         editMenu.add(item1);
         editMenu.add(item2);
         editMenu.add(item3);
@@ -80,7 +103,7 @@ public class Menu extends JMenuBar {
 
         return runMenu;
     }
-    
+
     private JMenu createOptionsMenu() {
         JMenu optionsMenu = new JMenu("Options");
         JMenuItem item1 = new JMenuItem("Change font");
@@ -91,5 +114,5 @@ public class Menu extends JMenuBar {
 
         return optionsMenu;
     }
-    
+
 }
