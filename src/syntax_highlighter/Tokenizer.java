@@ -76,7 +76,7 @@ public class Tokenizer {
                     switch (this.nextChar()) {
                         case '/' ->
                             this.tokenizeSingleLineComment();
-                        case '*' -> 
+                        case '*' ->
                             this.tokenizeMultiLineComment();
                         default ->
                             this.addToken("/", TokenType.OPERATOR);
@@ -119,7 +119,7 @@ public class Tokenizer {
                 current++;
                 continue;
             }
-            
+
             // Handle Char literals
             if (c == '\'') {
                 this.tokenizeCharLiteral();
@@ -181,18 +181,20 @@ public class Tokenizer {
         while (this.nextChar() != '\n') {
             this.current++;
         }
-        
+
         String value = this.sourceCode.substring(start, current + 1);
         this.addToken(value, TokenType.COMMENT);
     }
-    
+
     private void tokenizeMultiLineComment() {
         current++;
         while (this.currentChar() != '/' && !this.isAtEnd()) {
-            if (this.isNewline(this.currentChar())) line++;
+            if (this.isNewline(this.currentChar())) {
+                line++;
+            }
             this.current++;
         }
-        
+
         String value = this.sourceCode.substring(start, current + 1);
         this.addToken(value, TokenType.COMMENT);
     }
@@ -235,21 +237,33 @@ public class Tokenizer {
         current++;
 
         while (this.currentChar() != '"' && !this.isAtEnd()) {
+            // Ignore escape sequence characters
+            if (this.currentChar() == '\\') {
+                current++;
+            }
             current++;
         }
 
         String value = sourceCode.substring(start, current + 1);
         this.addToken(value, TokenType.STRING_LITERAL);
     }
-    
+
     private void tokenizeCharLiteral() {
         current++;
         while (this.currentChar() != '\'' && !this.isAtEnd()) {
+            // Ignore escape sequence character
+            if (this.currentChar() == '\\') {
+                current++;
+            }
             current++;
         }
-        
+
         String value = this.sourceCode.substring(start, current + 1);
         this.addToken(value, TokenType.CHAR_LITERAL);
+    }
+    
+    private void ignoreEscapeChar() {
+        current += 2;
     }
 
     /**

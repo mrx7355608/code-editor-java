@@ -2,7 +2,6 @@ package editor;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.KeyListener;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneLayout;
@@ -15,7 +14,7 @@ public class EditorView extends JScrollPane {
         editor = new JTextPane();
         editor.setCaretColor(Color.white);
         editor.setForeground(Color.white);
-        editor.setFont(new Font("Courier New", Font.PLAIN, 18));
+        editor.setFont(new Font("Courier New", Font.PLAIN, 16));
         editor.setBackground(new Color(50,50,50));
         super.setLayout(new ScrollPaneLayout());
         super.setViewportView(editor);
