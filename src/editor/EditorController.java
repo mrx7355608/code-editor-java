@@ -7,6 +7,7 @@ package editor;
 import core.Stack;
 import core.UndoRedoManager;
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -41,16 +42,26 @@ public class EditorController {
     }
 
     private void attachKeylistenerOnView() {
-        this.view.getTextPane().addKeyListener(new KeyListener() {
+        this.view.getTextPane().addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyChar() == '\n') {
+                    view.increamentLineNumbers();
+                }
+                
+                else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                    int linesInTextPane = view.getTextPane().getText().split("\n").length;
+                    if (linesInTextPane < view.getLineNumbers()) {
+                        view.decreamentLineNumbers();
+                    }
+                }
+                
                 // 1. After a certain delay, add the buffer to EditorModel's "code" field
                 final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
                     try {
                         String editorContent = view.getEditorContent();
 //                        model.setCode(editorContent);
                         syntaxHighlighter.highlight();
-                        System.out.println(editorContent);
                         undoStack.push(editorContent);
                     } finally {
                         delayedMap.remove("test");
@@ -61,15 +72,6 @@ public class EditorController {
                     prev.cancel(true);
                 }
             }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-
         });
 
     }
