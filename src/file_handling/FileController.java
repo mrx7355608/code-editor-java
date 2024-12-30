@@ -26,7 +26,7 @@ public class FileController {
         return file;
     }
 
-    public boolean saveFile(EditorFile file) {
+    public EditorFile saveFile(EditorFile file) {
         String path = file.getPath();
         String newData = file.getCode();
         
@@ -34,18 +34,22 @@ public class FileController {
         if (this.fileExists(path)) {
             System.out.println("Saving existing file");
             this.writeToFile(path, newData);
-            return true;
+            file.setSaved(true);
+            return file;
         }
 
         System.out.println("Creating new file...");
+        
         // 2. Otherwise, ask user where to save new file and save content in it
         File selectedFile = this.view.showSaveFileDialogueBox();
         if (selectedFile != null) {
-            this.writeToFile(path, newData);
-            return true;
+            String selectedFilePath = selectedFile.getAbsolutePath();
+            String name = this.extractNameFromPath(selectedFilePath);
+            this.writeToFile(selectedFilePath, newData);
+            return new EditorFile(name, selectedFilePath, newData, true);
         }
 
-        return false;
+        return file;
 
     }
 
@@ -103,5 +107,10 @@ public class FileController {
         } catch (IOException ex) {
             Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private String extractNameFromPath(String path) {
+        String[] splittedName = path.split("\\\\");
+        return splittedName[splittedName.length - 1];
     }
 }

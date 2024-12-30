@@ -24,13 +24,14 @@ public class MainController {
     
     public void newFile() {
         EditorFile newFile = this.fileController.createNewFile();        
-        this.editorController.updateCode(newFile.getCode());
+        this.editorController.setFile(newFile);
         this.editorController.updateUI();
     }
     
     public void saveFile() {
         EditorFile file = this.editorController.getFile();
-        this.fileController.saveFile(file);
+        EditorFile savedFile = this.fileController.saveFile(file);
+        this.editorController.setFile(savedFile);
     }
     
     public void openFile() {
