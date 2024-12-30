@@ -20,8 +20,7 @@ public class SyntaxHighlightController {
     public void highlight() {
         String text=  textPane.getText();
         text = text.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
-        System.out.println("highlighting..");
-        ArrayList<Token> tokens = tokenizer.tokenize(text);
+        ArrayList<Token> tokens = tokenizer.tokenize(text);        
         
         StyledDocument sd = textPane.getStyledDocument();
 

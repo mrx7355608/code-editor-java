@@ -1,6 +1,8 @@
 package codeeditor;
 
-import editor.KeyboardListener;
+import editor.EditorController;
+import editor.EditorModel;
+import editor.EditorView;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -19,10 +21,9 @@ public class CodeEditor extends JFrame {
         super.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         // Main Controller setup
-        MainModel model = new MainModel();
-        MainView view = new MainView();
-        MainController mainController = new MainController(view, model);
-        view.attachKeyListener(new KeyboardListener(mainController));
+        EditorModel model = new EditorModel();
+        EditorView view = new EditorView();
+        EditorController mainController = new EditorController(view, model);
         super.add(view, BorderLayout.CENTER);
         
         // JMenu Setup

@@ -2,34 +2,34 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package codeeditor;
+package editor;
 
 
 /**
  *
  * @author ghost
  */
-public class MainModel {
+public class EditorModel {
     private String name;
     private String path;
     private String code;
     private Boolean isSaved;
     
-    public MainModel() {
+    public EditorModel() {
         this.name = "Untitled.java";
         this.path = null;
         this.code = this.getSampleCode();
         this.isSaved = false;
     }
     
-    public MainModel(String name, String path) {
+    public EditorModel(String name, String path) {
         this.name = name;
         this.path = path;
         this.code = this.getSampleCode();
         this.isSaved = false;
     }
 
-    public MainModel(String name, String path, String code) {
+    public EditorModel(String name, String path, String code) {
         this.name = name;
         this.path = path;
         this.code = code;

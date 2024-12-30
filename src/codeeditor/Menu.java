@@ -4,6 +4,7 @@
  */
 package codeeditor;
 
+import editor.EditorController;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -14,9 +15,9 @@ import javax.swing.JMenuItem;
  */
 public class Menu extends JMenuBar {
 
-    private final MainController mainController;
+    private final EditorController mainController;
     
-    public Menu(MainController mainController) {
+    public Menu(EditorController mainController) {
         this.mainController = mainController;
         super.add(this.createFileMenu());
         super.add(this.createEditMenu());

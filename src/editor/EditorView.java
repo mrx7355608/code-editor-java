@@ -1,4 +1,4 @@
-package codeeditor;
+package editor;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,11 +7,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneLayout;
 
-public class MainView extends JScrollPane {
+public class EditorView extends JScrollPane {
 
     private final JTextPane editor;
 
-    public MainView() {
+    public EditorView() {
         editor = new JTextPane();
         editor.setCaretColor(Color.white);
         editor.setForeground(Color.white);
@@ -19,10 +19,6 @@ public class MainView extends JScrollPane {
         editor.setBackground(new Color(50,50,50));
         super.setLayout(new ScrollPaneLayout());
         super.setViewportView(editor);
-    }
-    
-    public void attachKeyListener(KeyListener listener) {
-        this.editor.addKeyListener(listener);
     }
     
     public String getEditorContent() {
