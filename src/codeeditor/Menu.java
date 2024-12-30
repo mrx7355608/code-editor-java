@@ -4,8 +4,6 @@
  */
 package codeeditor;
 
-import core.Stack;
-import core.UndoRedoManager;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -18,9 +16,6 @@ import javax.swing.JMenuItem;
 public class Menu extends JMenuBar {
 
     private final MainController mainController;
-    private final UndoRedoManager undoRedoHandler = UndoRedoManager.getInstance();
-    private final Stack undoStack = undoRedoHandler.getUndoStack();
-    private final Stack redoStack = undoRedoHandler.getRedoStack();
 
     public Menu(MainController mainController) {
         this.mainController = mainController;
@@ -66,21 +61,10 @@ public class Menu extends JMenuBar {
         JMenuItem item6 = new JMenuItem("Redo");
 
         item5.addActionListener((ActionEvent e) -> {
-            this.undoStack.pop();
-            String newData = this.undoStack.peek().data;
-
-            if (newData == null) {
-                this.mainController.editorController.getModel().setCode("");
-                this.mainController.editorController.updateUI();
-                return;
-            }
-            
-            this.mainController.editorController.getModel().setCode(newData);
-            this.mainController.editorController.updateUI();
-
+            this.mainController.undo();
         });
         item6.addActionListener((ActionEvent e) -> {
-            this.mainController.saveFile();
+            this.mainController.redo();
         });
 
         editMenu.add(item1);

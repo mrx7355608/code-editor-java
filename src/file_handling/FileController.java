@@ -20,11 +20,6 @@ public class FileController {
     public FileController(FileView view) {
         this.view = view;
     }
-    
-    public EditorFile createNewFile() {
-        EditorFile file = new EditorFile();
-        return file;
-    }
 
     public EditorFile saveFile(EditorFile file) {
         String path = file.getPath();
