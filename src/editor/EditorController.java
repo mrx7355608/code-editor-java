@@ -45,18 +45,10 @@ public class EditorController {
         this.view.getTextPane().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyChar() == '\n') {
-                    view.increamentLineNumbers();
-                }
+                // Increaes / Decreases line numbers
+                handleLineNumbers(e);
                 
-                else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                    int linesInTextPane = view.getTextPane().getText().split("\n").length;
-                    if (linesInTextPane < view.getLineNumbers()) {
-                        view.decreamentLineNumbers();
-                    }
-                }
-                
-                // 1. After a certain delay, add the buffer to EditorModel's "code" field
+                // Execute certain actions after user stops typing for 300ms
                 final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
                     try {
                         String editorContent = view.getEditorContent();
@@ -76,6 +68,17 @@ public class EditorController {
 
     }
 
+    private void handleLineNumbers(KeyEvent e) {
+        if (e.getKeyChar() == '\n') {
+            view.increamentLineNumbers();
+        } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            int linesInTextPane = view.getTextPane().getText().split("\n").length;
+            if (linesInTextPane < view.getLineNumbers()) {
+                view.decreamentLineNumbers();
+            }
+        }
+    }
+
     private void applyTheme() {
         HashMap<String, Color> theme = Theme.hope();
         theme.forEach((type, color) -> {
@@ -91,16 +94,29 @@ public class EditorController {
         this.view.getTextPane().setText(code);
         this.syntaxHighlighter.highlight();
     }
+    
+    public void cut() {
+        this.view.getTextPane().cut();
+        this.view.repaint();
+    }
+    
+    public void copy() {
+        this.view.getTextPane().copy();
+    }
+    
+    public void paste() {
+        this.view.getTextPane().paste();
+    }
 
+    public EditorModel getModel() {
+        return this.model;
+    }
+    
     public EditorFile getFile() {
         return this.model.getFile();
     }
 
     public void setFile(EditorFile file) {
         this.model.setFile(file);
-    }
-    
-    public EditorModel getModel() {
-        return this.model;
     }
 }

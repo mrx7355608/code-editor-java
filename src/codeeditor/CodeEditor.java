@@ -41,7 +41,7 @@ public class CodeEditor extends JFrame {
         MainController mainController = new MainController(editorController, fileController);
 
         // Keyboard shortcuts setup
-//        super.addKeyListener(new KeyboardShortcuts(mainController));
+        KeyboardShortcuts s = new KeyboardShortcuts(view.getTextPane(), mainController);
 
         // JMenu Setup
         Menu menu = new Menu(mainController);

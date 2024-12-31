@@ -2,7 +2,6 @@ package editor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -51,13 +50,13 @@ public class EditorView extends JScrollPane {
         return this.editor;
     }
     
+    public int getLineNumbers() {
+        return this.lines;
+    }
+    
     public void increamentLineNumbers() {
         this.listModel.addElement(++this.lines);
         this.list.revalidate();
-    }
-    
-    public int getLineNumbers() {
-        return this.lines;
     }
     
     public void decreamentLineNumbers() {
