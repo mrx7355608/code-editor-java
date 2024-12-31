@@ -3,7 +3,7 @@ package com.mycompany.core;
 
 
 public class Stack {
-    private final LinkedList linkedList = new LinkedList();
+    private final SinglyLinkedList linkedList = new SinglyLinkedList();
     
     public void push(String data) {
         this.linkedList.insertAtStart(data);
