@@ -4,9 +4,6 @@
  */
 package com.mycompany.codeeditor;
 
-import com.mycompany.core.Node;
-import com.mycompany.core.Stack;
-import com.mycompany.core.UndoRedoManager;
 import com.mycompany.editor.EditorController;
 import com.mycompany.editor.EditorFile;
 import com.mycompany.file_handling.FileController;
@@ -19,9 +16,6 @@ public class MainController {
 
     public EditorController editorController;
     public FileController fileController;
-    private final UndoRedoManager undoRedoHandler = UndoRedoManager.getInstance();
-    private final Stack undoStack = undoRedoHandler.getUndoStack();
-    private final Stack redoStack = undoRedoHandler.getRedoStack();
 
     public MainController(EditorController editorController, FileController fileController) {
         this.editorController = editorController;
@@ -47,41 +41,11 @@ public class MainController {
     }
 
     public void undo() {
-        Node topNode = this.undoStack.pop();
-        if (topNode == null) {
-            return;
-        }
-        
-        this.redoStack.push(topNode.data);
-        
-        String newData = this.undoStack.peek().data;
-
-        if (newData == null) {
-            this.editorController.getModel().setCode("");
-            this.editorController.updateUI();
-        } else {
-            this.editorController.getModel().setCode(newData);
-            this.editorController.updateUI();
-        }
+        this.editorController.undo();
     }
 
     public void redo() {
-        Node topNode = this.redoStack.pop();
-        if (topNode == null) {
-            return;
-        }
-        
-        this.undoStack.push(topNode.data);
-        
-        String newData = this.redoStack.peek().data;
-        
-        if (newData == null) {
-            this.editorController.getModel().setCode("");
-            this.editorController.updateUI();
-        } else {
-            this.editorController.getModel().setCode(newData);
-            this.editorController.updateUI();
-        }
+        this.editorController.redo();
     }
     
     public void cut() {

@@ -4,8 +4,6 @@
  */
 package com.mycompany.editor;
 
-import com.mycompany.core.Stack;
-import com.mycompany.core.UndoRedoManager;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -34,9 +32,6 @@ public class EditorController {
     private final EditorView view;
     private final EditorModel model;
     private final SyntaxHighlightController syntaxHighlighter;
-    private final UndoRedoManager undoRedoHandler = UndoRedoManager.getInstance();
-    private final Stack undoStack = undoRedoHandler.getUndoStack();
-    private final Stack redoStack = undoRedoHandler.getRedoStack();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final ConcurrentHashMap<Object, Future<?>> delayedMap = new ConcurrentHashMap<>();
 
@@ -51,16 +46,13 @@ public class EditorController {
         this.view.getTextPane().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                // Increaes / Decreases line numbers
                 handleLineNumbers(e);
                 
-                // Execute certain actions after user stops typing for 300ms
                 final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
                     try {
-                        String editorContent = view.getEditorContent();
-//                        model.setCode(editorContent);
-                        syntaxHighlighter.highlight();
-                        undoStack.push(editorContent);
+                        model.setCode(view.getEditorContent());
+                        model.pushToUndoStack(view.getEditorContent());
+//                        syntaxHighlighter.highlight();
                     } finally {
                         delayedMap.remove("test");
                     }
@@ -87,19 +79,11 @@ public class EditorController {
             }
         }
     }
-    
-    private boolean isSpacePressed(KeyEvent e) {
-        return e.getKeyCode() == KeyEvent.VK_BACK_SPACE;
-    }
-    
-    private boolean isEnterPressed(KeyEvent e) {
-        return e.getKeyCode() == KeyEvent.VK_ENTER;
-    }
 
     public void updateUI() {
         String code = this.model.getCode();
         this.view.getTextPane().setText(code);
-        this.syntaxHighlighter.highlight();
+//        this.syntaxHighlighter.highlight();
     }
     
     public void cut() {
@@ -113,8 +97,26 @@ public class EditorController {
     public void paste() {
         this.view.getTextPane().paste();
     }
+    
+    public void undo() {
+        this.model.performUndo();
+        this.updateUI();
+    }
+    
+    public void redo() {
+        this.model.performRedo();
+        this.updateUI();
+    }
 
     public EditorModel getModel() {
         return this.model;
+    }
+    
+    private boolean isSpacePressed(KeyEvent e) {
+        return e.getKeyCode() == KeyEvent.VK_BACK_SPACE;
+    }
+    
+    private boolean isEnterPressed(KeyEvent e) {
+        return e.getKeyCode() == KeyEvent.VK_ENTER;
     }
 }
