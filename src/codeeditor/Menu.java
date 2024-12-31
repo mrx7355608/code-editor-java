@@ -60,6 +60,15 @@ public class Menu extends JMenuBar {
         JMenuItem item5 = new JMenuItem("Undo");
         JMenuItem item6 = new JMenuItem("Redo");
 
+        item2.addActionListener((ActionEvent e) -> {
+            this.mainController.cut();
+        });
+        item3.addActionListener((ActionEvent e) -> {
+            this.mainController.copy();
+        });
+        item4.addActionListener((ActionEvent e) -> {
+            this.mainController.paste();
+        });
         item5.addActionListener((ActionEvent e) -> {
             this.mainController.undo();
         });

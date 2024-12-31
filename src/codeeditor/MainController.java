@@ -48,6 +48,10 @@ public class MainController {
 
     public void undo() {
         Node topNode = this.undoStack.pop();
+        if (topNode == null) {
+            return;
+        }
+        
         this.redoStack.push(topNode.data);
         
         String newData = this.undoStack.peek().data;
@@ -63,6 +67,10 @@ public class MainController {
 
     public void redo() {
         Node topNode = this.redoStack.pop();
+        if (topNode == null) {
+            return;
+        }
+        
         this.undoStack.push(topNode.data);
         
         String newData = this.redoStack.peek().data;
@@ -74,6 +82,18 @@ public class MainController {
             this.editorController.getModel().setCode(newData);
             this.editorController.updateUI();
         }
+    }
+    
+    public void cut() {
+        this.editorController.cut();
+    }
+    
+    public void copy() {
+        this.editorController.copy();
+    }
+    
+    public void paste() {
+        this.editorController.paste();
     }
 
 }
