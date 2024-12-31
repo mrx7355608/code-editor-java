@@ -1,11 +1,11 @@
 
 package com.mycompany.editor;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
+import org.junit.jupiter.api.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 public class EditorControllerTest {
@@ -15,7 +15,8 @@ public class EditorControllerTest {
     private EditorModel model;
     private EditorController editorController;
     
-    @Before
+    @BeforeAll
+    @DisplayName("Setup")
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         editorController = new EditorController(view, model);
