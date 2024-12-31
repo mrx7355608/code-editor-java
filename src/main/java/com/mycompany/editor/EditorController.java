@@ -21,22 +21,29 @@ import javax.swing.text.StyleConstants;
 import com.mycompany.syntax_highlighter.SyntaxHighlightController;
 import com.mycompany.themes.Theme;
 
+/**
+ * EditorController manages interactions between user and the code editor.
+ * It allows EditorModel and EditorView to communicate with each other so that
+ * code editor can work like a charm.
+ * 
+ * @author bugsbunny
+ */
+
 public class EditorController {
 
     private final EditorView view;
     private final EditorModel model;
     private final SyntaxHighlightController syntaxHighlighter;
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private final ConcurrentHashMap<Object, Future<?>> delayedMap = new ConcurrentHashMap<>();
     private final UndoRedoManager undoRedoHandler = UndoRedoManager.getInstance();
     private final Stack undoStack = undoRedoHandler.getUndoStack();
     private final Stack redoStack = undoRedoHandler.getRedoStack();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private final ConcurrentHashMap<Object, Future<?>> delayedMap = new ConcurrentHashMap<>();
 
     public EditorController(EditorView view, EditorModel model) {
         this.view = view;
         this.model = model;
         this.syntaxHighlighter = new SyntaxHighlightController(view.getTextPane());
-        this.applyTheme();
         this.attachKeylistenerOnView();
     }
 
@@ -68,24 +75,25 @@ public class EditorController {
     }
 
     private void handleLineNumbers(KeyEvent e) {
-        if (e.getKeyChar() == '\n') {
-            view.increamentLineNumbers();
-        } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+        if (isEnterPressed(e)) {
+            model.increamentLines();
+            view.updateLineNumbers();
+        }
+        else if (isSpacePressed(e)) {
             int linesInTextPane = view.getTextPane().getText().split("\n").length;
-            if (linesInTextPane < view.getLineNumbers()) {
-                view.decreamentLineNumbers();
+            if (linesInTextPane < model.getLineNumbers()) {
+                model.decreamentLines();
+                view.updateLineNumbers();
             }
         }
     }
-
-    private void applyTheme() {
-        HashMap<String, Color> theme = Theme.hope();
-        theme.forEach((type, color) -> {
-            JTextPane textPane = this.view.getTextPane();
-            Style style = textPane.addStyle(type, null);
-            StyleConstants.setForeground(style, color);
-
-        });
+    
+    private boolean isSpacePressed(KeyEvent e) {
+        return e.getKeyCode() == KeyEvent.VK_BACK_SPACE;
+    }
+    
+    private boolean isEnterPressed(KeyEvent e) {
+        return e.getKeyCode() == KeyEvent.VK_ENTER;
     }
 
     public void updateUI() {

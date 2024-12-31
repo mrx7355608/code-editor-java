@@ -7,12 +7,13 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("Test Class: Tokenizer")
 public class TokenizerTest {
     Tokenizer instance = new Tokenizer();
 
     @Test
+    @DisplayName("Should tokenize identifiers and keywords")
     public void testKeywordsAndIdentifiers() {
-        System.out.println("Should tokenize identifiers and keywords");
         String code = """
                       class Main {
                           public static void main(String[] args) {
@@ -30,8 +31,8 @@ public class TokenizerTest {
     }
 
     @Test
+    @DisplayName("Should tokenize single line comments")
     public void testSingleLineComments() {
-        System.out.println("Should tokenize single line comments");
         String code = """
                       // this is a comment
                       // this is another comment
@@ -47,8 +48,8 @@ public class TokenizerTest {
     }
     
     @Test
+    @DisplayName("Should tokenize multi line comments")
     public void testMultiLineComments() {
-        System.out.println("Should tokenize multi line comments");
         String code = """
                       /** 
                       * this is a multi
@@ -67,8 +68,8 @@ public class TokenizerTest {
     }
     
     @Test
+    @DisplayName("Should identify alpha-numeric words as a single token")
     public void testAlphaNumericIdentifiers() {
-        System.out.println("Should identify alpha-numeric words as a single token");
         String code = """
                       class Main {
                         public void method1() {}
@@ -88,8 +89,8 @@ public class TokenizerTest {
     }
 
     @Test
+    @DisplayName("Should tokenize brackets")
     public void testBrackets() {
-        System.out.println("Should tokenize brackets");
         String code = """
                       if (a > b) {}
                       else {}
@@ -104,8 +105,8 @@ public class TokenizerTest {
     }
 
     @Test
+    @DisplayName("Should tokenize operators")
     public void testOperators() {
-        System.out.println("Should tokenize operators");
         String code = """
                       int sum = a + b;
                       int sub = a - b;
@@ -120,8 +121,8 @@ public class TokenizerTest {
     }
     
     @Test
+    @DisplayName("Should tokenize string literals")
     public void testStringLiterals() {
-        System.out.println("Should tokenize string literals");
         String code = """
                       int sum = a + b;
                       String name = "fawad";
@@ -136,8 +137,8 @@ public class TokenizerTest {
     }
     
     @Test
+    @DisplayName("Should tokenize char literals")
     public void testCharLiterals() {
-        System.out.println("Should tokenize char literals");
         String code = """
                       int sum = 4;
                       char grade = 'A';
@@ -153,8 +154,8 @@ public class TokenizerTest {
     }
     
     @Test
+    @DisplayName("Should tokenize comparators")
     public void testComparators() {
-        System.out.println("Should tokenize comparators");
         String code = """
                       int sum = a + b;
                       if (sum >= b) {}
@@ -176,8 +177,8 @@ public class TokenizerTest {
     }
     
     @Test
+    @DisplayName("Should tokenize integers and float numbers")
     public void testNumbers() {
-        System.out.println("Should tokenize integers and float numbers");
         String code = """
                       int a = 56;
                       int b = 71.4;
@@ -193,8 +194,8 @@ public class TokenizerTest {
     }
 
     @Test
+    @DisplayName("Should calculate number of lines correctly")
     public void testGetLines() {
-        System.out.println("Should calculate number of lines correctly");
         String code = """
                       // this is a comment
                       class Main {

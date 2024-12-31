@@ -27,7 +27,7 @@ public class CodeEditor extends JFrame {
 
         // Editor setup
         EditorModel model = new EditorModel();
-        EditorView view = new EditorView();
+        EditorView view = new EditorView(model.getLineNumbersModel());
         EditorFile newFile = new EditorFile();
         model.setFile(newFile);
         EditorController editorController = new EditorController(view, model);

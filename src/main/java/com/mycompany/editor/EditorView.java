@@ -10,14 +10,26 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneLayout;
 
+/**
+ * 
+ * EditorView class is responsible for displaying code and line numbers
+ * 
+ * @author bugsbunny
+ */
+
 public class EditorView extends JScrollPane {
 
+    /**
+     * JTextPane editor: displays text in our code editor
+     */
     private final JTextPane editor;
-    private final JList list;
-    private final DefaultListModel listModel;
-    private int lines = 1;
-
-    public EditorView() {
+    
+    /**
+     * Displays line numbers on the editor
+     */
+    private final JList lineNumbersView;
+    
+    public EditorView(DefaultListModel lineNumbersModel) {
         // Init editor
         editor = new JTextPane();
         editor.setCaretColor(Color.white);
@@ -26,16 +38,14 @@ public class EditorView extends JScrollPane {
         editor.setBackground(new Color(50, 50, 50));
         
         // Line numbers
-        listModel = new DefaultListModel<String>();
-        listModel.addElement("1");
-        list = new JList(listModel);
-        list.setFont(new Font("Courier New", Font.PLAIN, 16));
+        lineNumbersView = new JList(lineNumbersModel);
+        lineNumbersView.setFont(new Font("Courier New", Font.PLAIN, 14));
         
         // Panel for this
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(editor, BorderLayout.CENTER);
-        panel.add(list, BorderLayout.WEST);
+        panel.add(lineNumbersView, BorderLayout.WEST);
         
         super.setLayout(new ScrollPaneLayout());
         super.setViewportView(panel);
@@ -50,17 +60,10 @@ public class EditorView extends JScrollPane {
         return this.editor;
     }
     
-    public int getLineNumbers() {
-        return this.lines;
-    }
-    
-    public void increamentLineNumbers() {
-        this.listModel.addElement(++this.lines);
-        this.list.revalidate();
-    }
-    
-    public void decreamentLineNumbers() {
-        this.listModel.removeElement(this.lines--);
-        this.list.revalidate();
+    /**
+     * It re-renders the "lineNumbersView (JList)" component
+     */
+    public void updateLineNumbers() {
+        this.lineNumbersView.revalidate();
     }
 }
