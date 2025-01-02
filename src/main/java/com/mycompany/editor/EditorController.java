@@ -17,7 +17,11 @@ import javax.swing.JTextPane;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import com.mycompany.syntax_highlighter.SyntaxHighlightController;
-import com.mycompany.themes.Theme;
+import com.mycompany.themes.ThemeManager;
+import javax.swing.BorderFactory;
+import javax.swing.JList;
+import javax.swing.border.Border;
+import javax.swing.text.StyledDocument;
 
 /**
  * EditorController manages interactions between user and the code editor. It
@@ -40,7 +44,42 @@ public class EditorController {
         this.syntaxHighlighter = new SyntaxHighlightController(view.getTextPane());
         this.attachKeylistenerOnView();
     }
+    
+    public void applyTheme(HashMap<String, Color> theme) {
+        // Apply theme to textpane's background and foreground colors
+        this.view.getTextPane().setBackground(theme.get("BACKGROUND"));
+        this.view.getTextPane().setForeground(theme.get("FOREGROUND"));
+        
+        // Apply theme to textpane's cursor
+        this.view.getTextPane().setCaretColor(theme.get("CURSOR"));
+        
+        // Apply theme to text pane for syntax highlighting
+        theme.forEach((category, color) -> {
+            Style style = this.view.getTextPane().addStyle(category, null);
+            StyleConstants.setForeground(style, color);
+        });
+        
+        // Apply theme to line numbers
+        JList lineNumbersView = this.view.getLineNumbersView();
+        lineNumbersView.setBackground(theme.get("BACKGROUND"));
+        lineNumbersView.setForeground(theme.get("FOREGROUND"));
+        Border b = BorderFactory.createMatteBorder(0, 0, 0, 1, theme.get("BORDER"));
+        lineNumbersView.setBorder(b);
+    }
 
+    private void handleLineNumbers(KeyEvent e) {
+        if (isEnterPressed(e)) {
+            model.increamentLines();
+            view.updateLineNumbers();
+        } else if (isSpacePressed(e)) {
+            int linesInTextPane = view.getTextPane().getText().split("\n").length;
+            if (linesInTextPane < model.getLineNumbers()) {
+                model.decreamentLines();
+                view.updateLineNumbers();
+            }
+        }
+    }
+    
     private void attachKeylistenerOnView() {
         this.view.getTextPane().addKeyListener(new KeyAdapter() {
             @Override
@@ -67,19 +106,6 @@ public class EditorController {
             }
         });
 
-    }
-
-    private void handleLineNumbers(KeyEvent e) {
-        if (isEnterPressed(e)) {
-            model.increamentLines();
-            view.updateLineNumbers();
-        } else if (isSpacePressed(e)) {
-            int linesInTextPane = view.getTextPane().getText().split("\n").length;
-            if (linesInTextPane < model.getLineNumbers()) {
-                model.decreamentLines();
-                view.updateLineNumbers();
-            }
-        }
     }
 
     public void updateUI() {

@@ -11,6 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import com.mycompany.keyboard_shortcuts.KeyboardShortcuts;
+import com.mycompany.themes.ThemeManager;
+import java.awt.Color;
+import java.util.HashMap;
 
 public class CodeEditor extends JFrame {
 
@@ -31,7 +34,8 @@ public class CodeEditor extends JFrame {
         EditorFile newFile = new EditorFile();
         model.setFile(newFile);
         EditorController editorController = new EditorController(view, model);
-        super.add(view, BorderLayout.CENTER);
+        
+        
 
         // FileIO setup
         FileView fileView = new FileView();
@@ -45,8 +49,14 @@ public class CodeEditor extends JFrame {
 
         // JMenu Setup
         Menu menu = new Menu(mainController);
+        
+        // Load and apply theme
+        HashMap<String, Color> theme = ThemeManager.diamonHead();        
+        editorController.applyTheme(theme);
+//        menu.applyTheme(theme);
+        
+        super.add(view, BorderLayout.CENTER);
         super.setJMenuBar(menu);
-
         super.setFocusable(true);
         super.requestFocusInWindow();
     }
