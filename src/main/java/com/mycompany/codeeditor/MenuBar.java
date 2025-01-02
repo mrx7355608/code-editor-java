@@ -4,12 +4,10 @@
  */
 package com.mycompany.codeeditor;
 
-import com.mycompany.codeeditor.MainController;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
@@ -17,7 +15,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 /**

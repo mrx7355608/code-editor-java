@@ -1,5 +1,7 @@
 package com.mycompany.codeeditor;
 
+import com.mycompany.console.ConsoleController;
+import com.mycompany.console.ConsoleView;
 import com.mycompany.editor.EditorController;
 import com.mycompany.editor.EditorFile;
 import com.mycompany.editor.EditorModel;
@@ -29,11 +31,11 @@ public class CodeEditor extends JFrame {
 //        super.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Editor setup
-        EditorModel model = new EditorModel();
-        EditorView view = new EditorView(model.getLineNumbersModel());
+        EditorModel editorModel = new EditorModel();
+        EditorView editorView = new EditorView(editorModel.getLineNumbersModel());
         EditorFile newFile = new EditorFile();
-        model.setFile(newFile);
-        EditorController editorController = new EditorController(view, model);
+        editorModel.setFile(newFile);
+        EditorController editorController = new EditorController(editorView, editorModel);
 
         // FileIO setup
         FileView fileView = new FileView();
@@ -43,17 +45,25 @@ public class CodeEditor extends JFrame {
         MainController mainController = new MainController(editorController, fileController);
 
         // Keyboard shortcuts setup
-        KeyboardShortcuts s = new KeyboardShortcuts(view.getTextPane(), mainController);
+        KeyboardShortcuts s = new KeyboardShortcuts(editorView.getTextPane(), mainController);
+
+        // Console Setup
+        ConsoleView consoleView = new ConsoleView();
+        ConsoleController consoleController = new ConsoleController(consoleView);
 
         // JMenu Setup
         MenuBar menu = new MenuBar(mainController);
 
         // Load and apply theme
         HashMap<String, Color> theme = ThemeManager.diamonHead();
-        editorController.applyTheme(theme);
         menu.applyTheme(theme);
+        editorController.applyTheme(theme);
+        consoleController.applyTheme(theme);
 
-        super.add(view, BorderLayout.CENTER);
+        // Split pane to make window adjustable
+        SplitPane splitPane = new SplitPane(editorView, consoleView);        
+
+        super.add(splitPane, BorderLayout.CENTER);
         super.setJMenuBar(menu);
     }
 
