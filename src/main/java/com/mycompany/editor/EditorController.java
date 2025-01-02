@@ -62,9 +62,8 @@ public class EditorController {
         // Apply theme to line numbers
         JList lineNumbersView = this.view.getLineNumbersView();
         lineNumbersView.setBackground(theme.get("BACKGROUND"));
-        lineNumbersView.setForeground(theme.get("FOREGROUND"));
-        Border b = BorderFactory.createMatteBorder(0, 0, 0, 1, theme.get("BORDER"));
-        lineNumbersView.setBorder(b);
+        lineNumbersView.setForeground(theme.get("FOREGROUND"));        
+        this.view.setLineNumbersViewBorderColor(theme.get("BORDER"));
     }
 
     private void handleLineNumbers(KeyEvent e) {

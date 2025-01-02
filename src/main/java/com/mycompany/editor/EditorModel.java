@@ -40,7 +40,7 @@ public class EditorModel {
      */
     public EditorModel() {
         this.lineNumbersModel = new DefaultListModel();
-        this.lineNumbersModel.addElement(String.valueOf(this.lines));
+        this.lineNumbersModel.addElement("01");
     }
 
     public void performUndo() {
@@ -144,10 +144,12 @@ public class EditorModel {
     }
 
     public void increamentLines() {
-        this.lineNumbersModel.addElement(String.valueOf(++this.lines));
+        String lineStr = String.format("%02d", ++this.lines);
+        this.lineNumbersModel.addElement(lineStr);
     }
 
     public void decreamentLines() {
-        this.lineNumbersModel.removeElement(String.valueOf(this.lines--));
+        String lineStr = String.format("%02d", this.lines--);
+        this.lineNumbersModel.removeElement(lineStr);
     }
 }

@@ -62,6 +62,11 @@ public class EditorView extends JScrollPane {
     public JList getLineNumbersView() {
         return this.lineNumbersView;
     }
+    
+    public void setLineNumbersViewBorderColor(Color c){
+        Border border = BorderFactory.createMatteBorder(0, 0, 0, 1, c);
+        this.lineNumbersView.setBorder(border);
+    }
 
     /**
      * It re-renders the "lineNumbersView (JList)" component
