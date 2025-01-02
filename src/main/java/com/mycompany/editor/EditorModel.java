@@ -43,9 +43,6 @@ public class EditorModel {
         this.lineNumbersModel.addElement(String.valueOf(this.lines));
     }
 
-    /**
-     * Removes a node from top of the undo stack and updates the EditorFile code
-     */
     public void performUndo() {
         // Remove the topmost node from the stack
         Node removedNode = this.undoStack.pop();
@@ -151,10 +148,10 @@ public class EditorModel {
     }
 
     public void increamentLines() {
-        this.lineNumbersModel.addElement(++this.lines);
+        this.lineNumbersModel.addElement(String.valueOf(++this.lines));
     }
 
     public void decreamentLines() {
-        this.lineNumbersModel.removeElement(this.lines--);
+        this.lineNumbersModel.removeElement(String.valueOf(this.lines--));
     }
 }
