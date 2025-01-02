@@ -20,13 +20,12 @@ import com.mycompany.syntax_highlighter.SyntaxHighlightController;
 import com.mycompany.themes.Theme;
 
 /**
- * EditorController manages interactions between user and the code editor.
- * It allows EditorModel and EditorView to communicate with each other so that
- * code editor can work like a charm.
- * 
+ * EditorController manages interactions between user and the code editor. It
+ * allows EditorModel and EditorView to communicate with each other so that code
+ * editor can work like a charm.
+ *
  * @author bugsbunny
  */
-
 public class EditorController {
 
     private final EditorView view;
@@ -46,8 +45,12 @@ public class EditorController {
         this.view.getTextPane().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                handleLineNumbers(e);
+                if (e.isControlDown()) {
+                    return;
+                }
                 
+                handleLineNumbers(e);
+
                 final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
                     try {
                         model.setCode(view.getEditorContent());
@@ -70,8 +73,7 @@ public class EditorController {
         if (isEnterPressed(e)) {
             model.increamentLines();
             view.updateLineNumbers();
-        }
-        else if (isSpacePressed(e)) {
+        } else if (isSpacePressed(e)) {
             int linesInTextPane = view.getTextPane().getText().split("\n").length;
             if (linesInTextPane < model.getLineNumbers()) {
                 model.decreamentLines();
@@ -85,24 +87,24 @@ public class EditorController {
         this.view.getTextPane().setText(code);
 //        this.syntaxHighlighter.highlight();
     }
-    
+
     public void cut() {
         this.view.getTextPane().cut();
     }
-    
+
     public void copy() {
         this.view.getTextPane().copy();
     }
-    
+
     public void paste() {
         this.view.getTextPane().paste();
     }
-    
+
     public void undo() {
         this.model.performUndo();
         this.updateUI();
     }
-    
+
     public void redo() {
         this.model.performRedo();
         this.updateUI();
@@ -111,11 +113,11 @@ public class EditorController {
     public EditorModel getModel() {
         return this.model;
     }
-    
+
     private boolean isSpacePressed(KeyEvent e) {
         return e.getKeyCode() == KeyEvent.VK_BACK_SPACE;
     }
-    
+
     private boolean isEnterPressed(KeyEvent e) {
         return e.getKeyCode() == KeyEvent.VK_ENTER;
     }

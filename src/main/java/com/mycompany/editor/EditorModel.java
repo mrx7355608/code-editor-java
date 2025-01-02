@@ -91,10 +91,6 @@ public class EditorModel {
         this.undoStack.push(data);
     }
 
-    public void pushToRedoStack(String data) {
-        this.redoStack.push(data);
-    }
-
     public EditorFile getFile() {
         return this.file;
     }
