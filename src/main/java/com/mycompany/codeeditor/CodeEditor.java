@@ -34,8 +34,6 @@ public class CodeEditor extends JFrame {
         EditorFile newFile = new EditorFile();
         model.setFile(newFile);
         EditorController editorController = new EditorController(view, model);
-        
-        
 
         // FileIO setup
         FileView fileView = new FileView();
@@ -48,17 +46,15 @@ public class CodeEditor extends JFrame {
         KeyboardShortcuts s = new KeyboardShortcuts(view.getTextPane(), mainController);
 
         // JMenu Setup
-        Menu menu = new Menu(mainController);
-        
+        MenuBar menu = new MenuBar(mainController);
+
         // Load and apply theme
-        HashMap<String, Color> theme = ThemeManager.diamonHead();        
+        HashMap<String, Color> theme = ThemeManager.diamonHead();
         editorController.applyTheme(theme);
-//        menu.applyTheme(theme);
-        
+        menu.applyTheme(theme);
+
         super.add(view, BorderLayout.CENTER);
         super.setJMenuBar(menu);
-        super.setFocusable(true);
-        super.requestFocusInWindow();
     }
 
     private void useSystemLookAndFeel() {

@@ -2,7 +2,6 @@ package com.mycompany.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -31,6 +30,13 @@ public class EditorView extends JScrollPane {
      */
     private final JList lineNumbersView;
 
+    /**
+     * A panel in which editor and line numbers views will be added and then
+     * this panel will be used as a view port view of JScrollPane. All of this
+     * is necessary so that both views can be scrolled simultaneously
+     */
+    private final JPanel panel;
+
     public EditorView(DefaultListModel lineNumbersModel) {
         // Init editor
         editor = new JTextPane();
@@ -41,7 +47,7 @@ public class EditorView extends JScrollPane {
         lineNumbersView.setFont(new Font("Courier New", Font.PLAIN, 14));
 
         // Panel for this
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(editor, BorderLayout.CENTER);
         panel.add(lineNumbersView, BorderLayout.WEST);
@@ -62,8 +68,8 @@ public class EditorView extends JScrollPane {
     public JList getLineNumbersView() {
         return this.lineNumbersView;
     }
-    
-    public void setLineNumbersViewBorderColor(Color c){
+
+    public void setLineNumbersViewBorderColor(Color c) {
         Border border = BorderFactory.createMatteBorder(0, 0, 0, 1, c);
         this.lineNumbersView.setBorder(border);
     }
