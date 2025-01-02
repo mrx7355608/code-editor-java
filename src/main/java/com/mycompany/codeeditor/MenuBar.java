@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
@@ -32,22 +33,6 @@ public class MenuBar extends JMenuBar {
     private JMenu optionsMenu;
     private JMenu runMenu;
 
-    static class MyMenu extends JMenu {
-
-        private final Border border = new LineBorder(Color.RED);
-
-        public MyMenu(String s) {
-            super(s);
-        }
-
-        @Override
-        public JPopupMenu getPopupMenu() {
-            JPopupMenu menu = super.getPopupMenu();
-            menu.setBorder(border);
-            return menu;
-        }
-    }
-
     public MenuBar(MainController mainController) {
         this.mainController = mainController;
         this.add(this.createFileMenu());
@@ -58,7 +43,7 @@ public class MenuBar extends JMenuBar {
     }
 
     private JMenu createFileMenu() {
-        fileMenu = new MyMenu("File");
+        fileMenu = new JMenu("File");
         JMenuItem item1 = new JMenuItem("New");
         JMenuItem item2 = new JMenuItem("Open");
         JMenuItem item3 = new JMenuItem("Save");
@@ -84,7 +69,7 @@ public class MenuBar extends JMenuBar {
     }
 
     private JMenu createEditMenu() {
-        editMenu = new MyMenu("Edit");
+        editMenu = new JMenu("Edit");
         JMenuItem item1 = new JMenuItem("Find");
         JMenuItem item2 = new JMenuItem("Cut");
         JMenuItem item3 = new JMenuItem("Copy");
@@ -119,7 +104,7 @@ public class MenuBar extends JMenuBar {
     }
 
     private JMenu createRunMenu() {
-        runMenu = new MyMenu("Run");
+        runMenu = new JMenu("Run");
         JMenuItem item1 = new JMenuItem("Run");
         JMenuItem item2 = new JMenuItem("Compile");
 
@@ -130,7 +115,7 @@ public class MenuBar extends JMenuBar {
     }
 
     private JMenu createOptionsMenu() {
-        optionsMenu = new MyMenu("Options");
+        optionsMenu = new JMenu("Options");
         JMenuItem item1 = new JMenuItem("Change font");
         JMenuItem item2 = new JMenuItem("Change theme");
 
@@ -164,8 +149,9 @@ public class MenuBar extends JMenuBar {
     }
 
     private void applyThemeToSubMenu(JMenu menu, HashMap<String, Color> theme) {
-        LineBorder border = new LineBorder(theme.get("BACKGROUND"));
-        menu.setBorder(border);
+        LineBorder border = new LineBorder(theme.get("BORDER"));
+        JPopupMenu p = menu.getPopupMenu();
+        p.setBorder(border);
 
         for (int i = 0; i < menu.getItemCount(); i++) {
             JMenuItem item = menu.getItem(i);

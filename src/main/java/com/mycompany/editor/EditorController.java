@@ -13,15 +13,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import javax.swing.JTextPane;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import com.mycompany.syntax_highlighter.SyntaxHighlightController;
-import com.mycompany.themes.ThemeManager;
-import javax.swing.BorderFactory;
 import javax.swing.JList;
-import javax.swing.border.Border;
-import javax.swing.text.StyledDocument;
 
 /**
  * EditorController manages interactions between user and the code editor. It
@@ -93,7 +88,7 @@ public class EditorController {
                     try {
                         model.setCode(view.getEditorContent());
                         model.pushToUndoStack(view.getEditorContent());
-//                        syntaxHighlighter.highlight();
+                        syntaxHighlighter.highlight();
                     } finally {
                         delayedMap.remove("test");
                     }
@@ -110,7 +105,7 @@ public class EditorController {
     public void updateUI() {
         String code = this.model.getCode();
         this.view.getTextPane().setText(code);
-//        this.syntaxHighlighter.highlight();
+        this.syntaxHighlighter.highlight();
     }
 
     public void cut() {
