@@ -15,6 +15,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import com.mycompany.keyboard_shortcuts.KeyboardShortcuts;
 import com.mycompany.search.SearchController;
 import com.mycompany.search.SearchView;
+import com.mycompany.syntax_highlighter.SyntaxHighlightController;
 import com.mycompany.themes.ThemeManager;
 import java.awt.Color;
 import java.util.HashMap;
@@ -37,7 +38,8 @@ public class CodeEditor extends JFrame {
         EditorView editorView = new EditorView(editorModel.getLineNumbersModel());
         EditorFile newFile = new EditorFile();
         editorModel.setFile(newFile);
-        EditorController editorController = new EditorController(editorView, editorModel);
+        SyntaxHighlightController syntaxHighlighter = new SyntaxHighlightController(editorView.getTextPane());
+        EditorController editorController = new EditorController(editorView, editorModel, syntaxHighlighter);
 
         // FileIO setup
         FileView fileView = new FileView();

@@ -34,10 +34,10 @@ public class EditorController {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final ConcurrentHashMap<Object, Future<?>> delayedMap = new ConcurrentHashMap<>();
 
-    public EditorController(EditorView view, EditorModel model) {
+    public EditorController(EditorView view, EditorModel model, SyntaxHighlightController syntaxHighlighter) {
         this.view = view;
         this.model = model;
-        this.syntaxHighlighter = new SyntaxHighlightController(view.getTextPane());
+        this.syntaxHighlighter = syntaxHighlighter;
         this.attachKeylistenerOnView();
     }
     

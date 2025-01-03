@@ -4,6 +4,7 @@
  */
 package com.mycompany.editor;
 
+import com.mycompany.syntax_highlighter.SyntaxHighlightController;
 import javax.swing.JTextPane;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ public class EditorControllerTest {
     
     private static EditorView mockView;
     private static EditorModel mockModel;
+    private static SyntaxHighlightController mockSyntaxHighlighter;
     private static JTextPane mockTextPane;
     
     
@@ -31,6 +33,7 @@ public class EditorControllerTest {
         mockView = mock(EditorView.class);
         mockModel = mock(EditorModel.class);
         mockTextPane = mock(JTextPane.class);
+        mockSyntaxHighlighter = mock(SyntaxHighlightController.class);
         
         when(mockView.getTextPane()).thenReturn(mockTextPane);
         doNothing().when(mockView).addKeyListener(null);
@@ -42,7 +45,7 @@ public class EditorControllerTest {
     @Test
     public void testUpdateUI() {
         System.out.println("updateUI");
-        EditorController instance = new EditorController(mockView, mockModel);
+        EditorController instance = new EditorController(mockView, mockModel, mockSyntaxHighlighter);
         
         when(mockModel.getCode()).thenReturn("class Main {}");
         doNothing().when(mockTextPane).setText("class Main {}");
@@ -58,7 +61,7 @@ public class EditorControllerTest {
     @Test
     public void testCut() {
         System.out.println("cut");
-        EditorController instance = new EditorController(mockView, mockModel);
+        EditorController instance = new EditorController(mockView, mockModel, mockSyntaxHighlighter);
         
         // Mock textPane.cut() method
         doNothing().when(mockTextPane).cut();
@@ -74,7 +77,7 @@ public class EditorControllerTest {
     @Test
     public void testCopy() {
         System.out.println("copy");
-        EditorController instance = new EditorController(mockView, mockModel);
+        EditorController instance = new EditorController(mockView, mockModel, mockSyntaxHighlighter);
         
         // Mock textPane.copy() method
         doNothing().when(mockTextPane).copy();
@@ -90,7 +93,7 @@ public class EditorControllerTest {
     @Test
     public void testPaste() {
         System.out.println("paste");
-        EditorController instance = new EditorController(mockView, mockModel);
+        EditorController instance = new EditorController(mockView, mockModel, mockSyntaxHighlighter);
         
         // Mock textPane.paste() method
         doNothing().when(mockTextPane).paste();
@@ -106,8 +109,8 @@ public class EditorControllerTest {
     @Test
     public void testUndo() {
         System.out.println("undo");
-        EditorController instance = new EditorController(mockView, mockModel);
-        
+        EditorController instance = new EditorController(mockView, mockModel, mockSyntaxHighlighter);
+
         doNothing().when(mockTextPane).setText("");
         
         instance.undo();
@@ -120,7 +123,7 @@ public class EditorControllerTest {
     @Test
     public void testRedo() {
         System.out.println("redo");
-        EditorController instance = new EditorController(mockView, mockModel);
+        EditorController instance = new EditorController(mockView, mockModel, mockSyntaxHighlighter);
         
         // Mock view.updateUI() method
         doNothing().when(mockTextPane).setText("");
@@ -135,7 +138,7 @@ public class EditorControllerTest {
     @Test
     public void testGetModel() {
         System.out.println("getModel");
-        EditorController instance = new EditorController(mockView, mockModel);
+        EditorController instance = new EditorController(mockView, mockModel, mockSyntaxHighlighter);
         
         EditorModel result = instance.getModel();
         assertEquals(mockModel, result);

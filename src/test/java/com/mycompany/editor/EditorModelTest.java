@@ -114,10 +114,10 @@ public class EditorModelTest {
         int exp = 5;
         assertEquals(exp, myInstance.getLineNumbers());
         assertEquals(exp, listModel.getSize());
-        assertEquals("1", listModel.getElementAt(0));
-        assertEquals("2", listModel.getElementAt(1));
-        assertEquals("3", listModel.getElementAt(2));
-        assertEquals("4", listModel.getElementAt(3));
+        assertEquals("01", listModel.getElementAt(0));
+        assertEquals("02", listModel.getElementAt(1));
+        assertEquals("03", listModel.getElementAt(2));
+        assertEquals("04", listModel.getElementAt(3));
     }
 
     /**
@@ -139,8 +139,8 @@ public class EditorModelTest {
         int exp = 2;
         assertEquals(exp, myInstance.getLineNumbers());
         assertEquals(exp, listModel.getSize());
-        assertEquals("1", listModel.getElementAt(0));
-        assertEquals("2", listModel.getElementAt(1));
+        assertEquals("01", listModel.getElementAt(0));
+        assertEquals("02", listModel.getElementAt(1));
     }
 
 }
