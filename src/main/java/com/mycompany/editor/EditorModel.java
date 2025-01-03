@@ -82,7 +82,7 @@ public class EditorModel {
 
         // Otherwise, set the code.
         this.file.setCode(removedNode.data);
-        
+
         // Lastly push the removedNode into undoStack
         this.undoStack.push(removedNode.data);
     }
@@ -151,5 +151,13 @@ public class EditorModel {
     public void decreamentLines() {
         String lineStr = String.format("%02d", this.lines--);
         this.lineNumbersModel.removeElement(lineStr);
+    }
+
+    public void increaseLinesOnPaste(int start, int end) {
+        for (int i = start; i <= end; i++) {
+            String lineStr = String.format("%02d", i);
+            this.lineNumbersModel.addElement(lineStr);
+            this.lines++;
+        }
     }
 }

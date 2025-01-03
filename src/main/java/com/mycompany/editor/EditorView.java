@@ -77,7 +77,7 @@ public class EditorView extends JScrollPane {
     /**
      * It re-renders the "lineNumbersView (JList)" component
      */
-    public void updateLineNumbers() {
+    public void reRenderLineNumbers() {
         this.lineNumbersView.revalidate();
     }
 }

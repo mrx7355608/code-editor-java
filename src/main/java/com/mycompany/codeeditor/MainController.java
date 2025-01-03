@@ -94,8 +94,6 @@ public class MainController {
     
     public void search() {
         this.searchController.showSearchView();
-        JTextPane textPane = this.editorController.getTextPane();
-//        this.searchController
     }
 
 }

@@ -40,6 +40,7 @@ public class CodeEditor extends JFrame {
         editorModel.setFile(newFile);
         SyntaxHighlightController syntaxHighlighter = new SyntaxHighlightController(editorView.getTextPane());
         EditorController editorController = new EditorController(editorView, editorModel, syntaxHighlighter);
+        editorController.bindCustomPasteAction();
 
         // FileIO setup
         FileView fileView = new FileView();

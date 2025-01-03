@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import com.mycompany.syntax_highlighter.SyntaxHighlightController;
+import javax.swing.Action;
 import javax.swing.JList;
 import javax.swing.JTextPane;
 
@@ -40,41 +41,41 @@ public class EditorController {
         this.syntaxHighlighter = syntaxHighlighter;
         this.attachKeylistenerOnView();
     }
-    
+
     public void applyTheme(HashMap<String, Color> theme) {
         // Apply theme to textpane's background and foreground colors
         this.view.getTextPane().setBackground(theme.get("BACKGROUND"));
         this.view.getTextPane().setForeground(theme.get("FOREGROUND"));
-        
+
         // Apply theme to textpane's cursor
         this.view.getTextPane().setCaretColor(theme.get("CURSOR"));
-        
+
         // Apply theme to text pane for syntax highlighting
         theme.forEach((category, color) -> {
             Style style = this.view.getTextPane().addStyle(category, null);
             StyleConstants.setForeground(style, color);
         });
-        
+
         // Apply theme to line numbers
         JList lineNumbersView = this.view.getLineNumbersView();
         lineNumbersView.setBackground(theme.get("BACKGROUND"));
-        lineNumbersView.setForeground(theme.get("FOREGROUND"));        
+        lineNumbersView.setForeground(theme.get("FOREGROUND"));
         this.view.setLineNumbersViewBorderColor(theme.get("BORDER"));
     }
 
     private void handleLineNumbers(KeyEvent e) {
         if (isEnterPressed(e)) {
             model.increamentLines();
-            view.updateLineNumbers();
-        } else if (isSpacePressed(e)) {
+            view.reRenderLineNumbers();
+        } else if (isSpacePressed(e) || isDelPressed(e)) {
             int linesInTextPane = view.getTextPane().getText().split("\n").length;
             if (linesInTextPane < model.getLineNumbers()) {
                 model.decreamentLines();
-                view.updateLineNumbers();
+                view.reRenderLineNumbers();
             }
         }
     }
-    
+
     private void attachKeylistenerOnView() {
         this.view.getTextPane().addKeyListener(new KeyAdapter() {
             @Override
@@ -82,7 +83,7 @@ public class EditorController {
                 if (e.isControlDown()) {
                     return;
                 }
-                
+
                 handleLineNumbers(e);
 
                 final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
@@ -134,7 +135,7 @@ public class EditorController {
     public EditorModel getModel() {
         return this.model;
     }
-    
+
     public JTextPane getTextPane() {
         return this.view.getTextPane();
     }
@@ -142,8 +143,31 @@ public class EditorController {
     private boolean isSpacePressed(KeyEvent e) {
         return e.getKeyCode() == KeyEvent.VK_BACK_SPACE;
     }
+    
+    private boolean isDelPressed(KeyEvent e) {
+        return e.getKeyCode() == KeyEvent.VK_DELETE;
+    }
 
     private boolean isEnterPressed(KeyEvent e) {
         return e.getKeyCode() == KeyEvent.VK_ENTER;
+    }
+
+    private void highlightAndIncreaseLineNumbers() {
+        int linesInTextPane = view.getTextPane().getText().split("\n").length;
+        if (linesInTextPane > model.getLineNumbers()) {
+            model.increaseLinesOnPaste(model.getLineNumbers() + 1, linesInTextPane);
+            view.reRenderLineNumbers();
+        }
+        this.model.setCode(view.getTextPane().getText());
+        this.syntaxHighlighter.highlight();
+    }
+
+    public void bindCustomPasteAction() {
+        JTextPane textPane = this.view.getTextPane();
+        Action action = textPane.getActionMap().get("paste-from-clipboard");
+        textPane.getActionMap().put(
+            "paste-from-clipboard",
+            new PasteAction(action, this::highlightAndIncreaseLineNumbers)
+        );
     }
 }

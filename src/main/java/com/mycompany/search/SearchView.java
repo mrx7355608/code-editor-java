@@ -8,11 +8,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
@@ -82,6 +80,8 @@ public class SearchView extends JPanel {
     }
     
     private void removeHighlights() {
-        highlighter.removeAllHighlights();
+        if (this.highlighter != null) {
+            highlighter.removeAllHighlights();
+        }
     }
 }
