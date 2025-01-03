@@ -26,6 +26,7 @@ public class KeyboardShortcuts {
         KeyStroke ctrlS = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
         KeyStroke ctrlZ = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK);
         KeyStroke ctrlR = KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK);
+        KeyStroke altF6 = KeyStroke.getKeyStroke(KeyEvent.VK_F6, InputEvent.ALT_DOWN_MASK);
         
         // Binding shortcuts to action names
         inputMap.put(ctrlN, "new");
@@ -33,6 +34,7 @@ public class KeyboardShortcuts {
         inputMap.put(ctrlS, "save");
         inputMap.put(ctrlZ, "undo");
         inputMap.put(ctrlR, "redo");
+        inputMap.put(altF6, "compile");
         
         // Binding action names to their action
         actionMap.put("new", new ShortcutAction(mainController::newFile));
@@ -40,5 +42,6 @@ public class KeyboardShortcuts {
         actionMap.put("save", new ShortcutAction(mainController::saveFile));
         actionMap.put("undo", new ShortcutAction(mainController::undo));
         actionMap.put("redo", new ShortcutAction(mainController::redo));
+        actionMap.put("compile", new ShortcutAction(mainController::compile));
     }
 }

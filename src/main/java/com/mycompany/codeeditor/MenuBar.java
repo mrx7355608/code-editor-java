@@ -104,6 +104,13 @@ public class MenuBar extends JMenuBar {
         runMenu = new JMenu("Run");
         JMenuItem item1 = new JMenuItem("Run");
         JMenuItem item2 = new JMenuItem("Compile");
+        
+        item1.addActionListener((ActionEvent e) -> {
+            this.mainController.compileAndRun();
+        });
+        item2.addActionListener((ActionEvent e) -> {
+            this.mainController.compile();
+        });
 
         runMenu.add(item1);
         runMenu.add(item2);

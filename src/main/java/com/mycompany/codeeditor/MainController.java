@@ -4,6 +4,7 @@
  */
 package com.mycompany.codeeditor;
 
+import com.mycompany.console.ConsoleController;
 import com.mycompany.editor.EditorController;
 import com.mycompany.editor.EditorFile;
 import com.mycompany.file_handling.FileController;
@@ -16,10 +17,16 @@ public class MainController {
 
     public EditorController editorController;
     public FileController fileController;
+    public ConsoleController consoleController;
 
-    public MainController(EditorController editorController, FileController fileController) {
+    public MainController(
+            EditorController editorController,
+            FileController fileController,
+            ConsoleController consoleController
+    ) {
         this.editorController = editorController;
         this.fileController = fileController;
+        this.consoleController = consoleController;
     }
 
     public void newFile() {
@@ -47,17 +54,37 @@ public class MainController {
     public void redo() {
         this.editorController.redo();
     }
-    
+
     public void cut() {
         this.editorController.cut();
     }
-    
+
     public void copy() {
         this.editorController.copy();
     }
-    
+
     public void paste() {
         this.editorController.paste();
+    }
+    
+    public void compile() {
+        System.out.println("compiling...");
+        String filepath = this.editorController.getModel().getFile().getPath();
+        if (filepath == null) {
+            System.out.println("filepath missing");
+            return;
+        }
+        this.consoleController.compileCode(filepath);
+    }
+    
+    public void compileAndRun() {
+        System.out.println("compile and run...");
+        String filepath = this.editorController.getModel().getFile().getPath();
+        if (filepath == null) {
+            System.out.println("filepath missing");
+            return;
+        }
+        this.consoleController.runCode(filepath);
     }
 
 }

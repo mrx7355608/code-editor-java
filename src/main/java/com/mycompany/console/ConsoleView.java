@@ -5,6 +5,7 @@
 package com.mycompany.console;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,7 +22,7 @@ public class ConsoleView extends JPanel {
     public ConsoleView() {
         textPane = new JTextPane();
         textPane.setEditable(false);
-        textPane.setText("Output will be shown here.\n");
+        textPane.setFont(new Font("Courier New", Font.PLAIN, 15));
         textPane.setBorder(BorderFactory.createEmptyBorder());
         
         JScrollPane scrollPane = new JScrollPane();

@@ -41,15 +41,15 @@ public class CodeEditor extends JFrame {
         FileView fileView = new FileView();
         FileController fileController = new FileController(fileView);
 
-        // Main controller setup
-        MainController mainController = new MainController(editorController, fileController);
-
-        // Keyboard shortcuts setup
-        KeyboardShortcuts s = new KeyboardShortcuts(editorView.getTextPane(), mainController);
-
         // Console Setup
         ConsoleView consoleView = new ConsoleView();
         ConsoleController consoleController = new ConsoleController(consoleView);
+
+        // Main controller setup
+        MainController mainController = new MainController(editorController, fileController, consoleController);
+
+        // Keyboard shortcuts setup
+        KeyboardShortcuts s = new KeyboardShortcuts(editorView.getTextPane(), mainController);
 
         // JMenu Setup
         MenuBar menu = new MenuBar(mainController);
@@ -61,7 +61,7 @@ public class CodeEditor extends JFrame {
         consoleController.applyTheme(theme);
 
         // Split pane to make window adjustable
-        SplitPane splitPane = new SplitPane(editorView, consoleView);        
+        SplitPane splitPane = new SplitPane(editorView, consoleView);
 
         super.add(splitPane, BorderLayout.CENTER);
         super.setJMenuBar(menu);
