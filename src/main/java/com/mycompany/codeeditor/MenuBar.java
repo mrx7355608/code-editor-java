@@ -74,6 +74,9 @@ public class MenuBar extends JMenuBar {
         JMenuItem item5 = new JMenuItem("Undo");
         JMenuItem item6 = new JMenuItem("Redo");
 
+        item1.addActionListener((ActionEvent e) -> {
+            this.mainController.searchController.showSearchView();
+        });
         item2.addActionListener((ActionEvent e) -> {
             this.mainController.cut();
         });

@@ -17,6 +17,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import com.mycompany.syntax_highlighter.SyntaxHighlightController;
 import javax.swing.JList;
+import javax.swing.JTextPane;
 
 /**
  * EditorController manages interactions between user and the code editor. It
@@ -132,6 +133,10 @@ public class EditorController {
 
     public EditorModel getModel() {
         return this.model;
+    }
+    
+    public JTextPane getTextPane() {
+        return this.view.getTextPane();
     }
 
     private boolean isSpacePressed(KeyEvent e) {

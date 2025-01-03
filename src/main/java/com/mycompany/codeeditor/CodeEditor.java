@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import com.mycompany.keyboard_shortcuts.KeyboardShortcuts;
+import com.mycompany.search.SearchController;
+import com.mycompany.search.SearchView;
 import com.mycompany.themes.ThemeManager;
 import java.awt.Color;
 import java.util.HashMap;
@@ -45,8 +47,17 @@ public class CodeEditor extends JFrame {
         ConsoleView consoleView = new ConsoleView();
         ConsoleController consoleController = new ConsoleController(consoleView);
 
+        // Search setup
+        SearchView searchView = new SearchView(editorView.getTextPane());
+        SearchController searchController = new SearchController(searchView);
+
         // Main controller setup
-        MainController mainController = new MainController(editorController, fileController, consoleController);
+        MainController mainController = new MainController(
+                editorController, 
+                fileController, 
+                consoleController, 
+                searchController
+        );
 
         // Keyboard shortcuts setup
         KeyboardShortcuts s = new KeyboardShortcuts(editorView.getTextPane(), mainController);
@@ -59,11 +70,13 @@ public class CodeEditor extends JFrame {
         menu.applyTheme(theme);
         editorController.applyTheme(theme);
         consoleController.applyTheme(theme);
+        searchController.applyTheme(theme);
 
         // Split pane to make window adjustable
         SplitPane splitPane = new SplitPane(editorView, consoleView);
 
         super.add(splitPane, BorderLayout.CENTER);
+        super.add(searchView, BorderLayout.SOUTH);
         super.setJMenuBar(menu);
     }
 

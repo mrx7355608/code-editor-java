@@ -8,6 +8,8 @@ import com.mycompany.console.ConsoleController;
 import com.mycompany.editor.EditorController;
 import com.mycompany.editor.EditorFile;
 import com.mycompany.file_handling.FileController;
+import com.mycompany.search.SearchController;
+import javax.swing.JTextPane;
 
 /**
  *
@@ -18,15 +20,18 @@ public class MainController {
     public EditorController editorController;
     public FileController fileController;
     public ConsoleController consoleController;
+    public SearchController searchController;
 
     public MainController(
             EditorController editorController,
             FileController fileController,
-            ConsoleController consoleController
+            ConsoleController consoleController,
+            SearchController searchController
     ) {
         this.editorController = editorController;
         this.fileController = fileController;
         this.consoleController = consoleController;
+        this.searchController = searchController;
     }
 
     public void newFile() {
@@ -85,6 +90,12 @@ public class MainController {
             return;
         }
         this.consoleController.runCode(filepath);
+    }
+    
+    public void search() {
+        this.searchController.showSearchView();
+        JTextPane textPane = this.editorController.getTextPane();
+//        this.searchController
     }
 
 }
