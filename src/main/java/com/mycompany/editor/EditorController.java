@@ -81,7 +81,6 @@ public class EditorController {
                     model.increamentLines();
                     view.reRenderLineNumbers();
                 }
-                handleLineNumbers(e);
 
                 final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
                     try {
