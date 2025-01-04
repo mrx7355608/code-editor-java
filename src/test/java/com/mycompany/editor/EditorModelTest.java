@@ -119,29 +119,6 @@ public class EditorModelTest {
         assertEquals("03", listModel.getElementAt(2));
         assertEquals("04", listModel.getElementAt(3));
     }
-
-    /**
-     * Test of decreamentLines method, of class EditorModel.
-     */
-    @Test
-    public void testDecreamentLines() {
-        System.out.println("decreamentLines");
-
-        EditorModel myInstance = new EditorModel();
-        DefaultListModel listModel = myInstance.getLineNumbersModel();
-
-        myInstance.increamentLines();
-        myInstance.increamentLines();
-        myInstance.increamentLines();
-        myInstance.decreamentLines();
-        myInstance.decreamentLines();
-
-        int exp = 2;
-        assertEquals(exp, myInstance.getLineNumbers());
-        assertEquals(exp, listModel.getSize());
-        assertEquals("01", listModel.getElementAt(0));
-        assertEquals("02", listModel.getElementAt(1));
-    }
     
     @Test
     public void testGetLineNumbers() {
@@ -164,6 +141,28 @@ public class EditorModelTest {
         assertEquals(exp, listModel.getSize());
         assertEquals("01", listModel.getElementAt(0));
         assertEquals("02", listModel.getElementAt(1));
+    }
+    
+    @Test
+    public void testDecreaseLines() {
+        System.out.println("decreaseLines");
+
+        EditorModel myInstance = new EditorModel();
+        DefaultListModel listModel = myInstance.getLineNumbersModel();
+
+        myInstance.increamentLines();
+        myInstance.increamentLines();
+        myInstance.increamentLines();
+        myInstance.increamentLines();
+        myInstance.increamentLines();
+        myInstance.increamentLines();
+        myInstance.decreaseLinesToSyncWithTextPane(4);
+
+        int exp = 4;
+        assertEquals(exp, myInstance.getLineNumbers());
+        assertEquals(exp, listModel.getSize());
+        assertEquals("03", listModel.getElementAt(2));
+        assertEquals("04", listModel.getElementAt(3));
     }
 
 }

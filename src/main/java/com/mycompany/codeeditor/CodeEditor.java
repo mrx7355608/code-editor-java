@@ -41,6 +41,7 @@ public class CodeEditor extends JFrame {
         SyntaxHighlightController syntaxHighlighter = new SyntaxHighlightController(editorView.getTextPane());
         EditorController editorController = new EditorController(editorView, editorModel, syntaxHighlighter);
         editorController.bindCustomPasteAction();
+        editorController.bindDocumentListener();
 
         // FileIO setup
         FileView fileView = new FileView();

@@ -37,7 +37,7 @@ public class MainController {
     public void newFile() {
         EditorFile newFile = new EditorFile();
         this.editorController.getModel().setFile(newFile);
-        this.editorController.updateUI();
+        this.editorController.reRenderUI();
     }
 
     public void saveFile() {
@@ -49,7 +49,7 @@ public class MainController {
     public void openFile() {
         EditorFile file = this.fileController.openFile();
         this.editorController.getModel().setFile(file);
-        this.editorController.updateUI();
+        this.editorController.reRenderUI();
     }
 
     public void undo() {

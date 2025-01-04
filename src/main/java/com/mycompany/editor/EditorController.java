@@ -19,6 +19,9 @@ import com.mycompany.syntax_highlighter.SyntaxHighlightController;
 import javax.swing.Action;
 import javax.swing.JList;
 import javax.swing.JTextPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 
 /**
  * EditorController manages interactions between user and the code editor. It
@@ -64,26 +67,24 @@ public class EditorController {
     }
 
     private void handleLineNumbers(KeyEvent e) {
-        if (isEnterPressed(e)) {
-            model.increamentLines();
-            view.reRenderLineNumbers();
-        } else if (isSpacePressed(e) || isDelPressed(e)) {
-            int linesInTextPane = view.getTextPane().getText().split("\n").length;
-            if (linesInTextPane < model.getLineNumbers()) {
-                model.decreamentLines();
-                view.reRenderLineNumbers();
-            }
-        }
+
     }
 
     private void attachKeylistenerOnView() {
         this.view.getTextPane().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                // When CTRL is pressed, do nothing cuz user is about to execute
+                // a shortcut
                 if (e.isControlDown()) {
                     return;
                 }
 
+                // Increase line numbers when enter is pressed
+                if (isEnterPressed(e)) {
+                    model.increamentLines();
+                    view.reRenderLineNumbers();
+                }
                 handleLineNumbers(e);
 
                 final Future<?> prev = delayedMap.put("test", scheduler.schedule(() -> {
@@ -104,7 +105,7 @@ public class EditorController {
 
     }
 
-    public void updateUI() {
+    public void reRenderUI() {
         String code = this.model.getCode();
         this.view.getTextPane().setText(code);
         this.syntaxHighlighter.highlight();
@@ -124,12 +125,12 @@ public class EditorController {
 
     public void undo() {
         this.model.performUndo();
-        this.updateUI();
+        this.reRenderUI();
     }
 
     public void redo() {
         this.model.performRedo();
-        this.updateUI();
+        this.reRenderUI();
     }
 
     public EditorModel getModel() {
@@ -140,14 +141,6 @@ public class EditorController {
         return this.view.getTextPane();
     }
 
-    private boolean isSpacePressed(KeyEvent e) {
-        return e.getKeyCode() == KeyEvent.VK_BACK_SPACE;
-    }
-    
-    private boolean isDelPressed(KeyEvent e) {
-        return e.getKeyCode() == KeyEvent.VK_DELETE;
-    }
-
     private boolean isEnterPressed(KeyEvent e) {
         return e.getKeyCode() == KeyEvent.VK_ENTER;
     }
@@ -155,7 +148,7 @@ public class EditorController {
     public void customPasteAction() {
         // Get pasted code from textPane
         String code = view.getEditorContent();
-        
+
         // If number of lines in textPane are greater than lines in EditorModel
         // then increase the lines in model and line numbers view
         int linesInTextPane = code.split("\n").length;
@@ -163,7 +156,7 @@ public class EditorController {
             model.increaseLinesOnPaste(linesInTextPane);
             view.reRenderLineNumbers();
         }
-        
+
         // Update code inside model
         this.model.setCode(code);
         this.syntaxHighlighter.highlight();
@@ -173,7 +166,33 @@ public class EditorController {
         JTextPane textPane = this.view.getTextPane();
         Action action = textPane.getActionMap().get("paste-from-clipboard");
         textPane.getActionMap().put("paste-from-clipboard",
-            new PasteAction(action, this::customPasteAction)
+                new PasteAction(action, this::customPasteAction)
         );
+    }
+
+    public void bindDocumentListener() {
+        Document doc = this.view.getTextPane().getDocument();
+        doc.addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                // Calculate how many lines of code are in textPane currently
+                int linesInTextPane = view.getEditorContent().split("\n").length;
+                
+                // If they are less than the lines of code in model, then
+                // decrease them
+                if (linesInTextPane < model.getLineNumbers()) {
+                    model.decreaseLinesToSyncWithTextPane(linesInTextPane);
+                    view.reRenderLineNumbers();
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
     }
 }

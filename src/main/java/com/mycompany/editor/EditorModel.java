@@ -148,17 +148,20 @@ public class EditorModel {
         this.lineNumbersModel.addElement(lineStr);
     }
 
-    public void decreamentLines() {
-        String lineStr = String.format("%02d", this.lines--);
-        this.lineNumbersModel.removeElement(lineStr);
-    }
-
     public void increaseLinesOnPaste(int linesInTextPane) {
         for (int i = this.lines + 1; i <= linesInTextPane; i++) {
-            System.out.println("---looping---");
             String lineStr = String.format("%02d", i);
             this.lineNumbersModel.addElement(lineStr);
             this.lines++;
+        }
+    }
+    
+    public void decreaseLinesToSyncWithTextPane(int linesInTextPane) {
+        for (int i = this.lines; i > linesInTextPane; i--) {
+            System.out.println("---looping to decrease ---");
+            String lineStr = String.format("%02d", i);
+            this.lineNumbersModel.removeElement(lineStr);
+            this.lines--;
         }
     }
 }

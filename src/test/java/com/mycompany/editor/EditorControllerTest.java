@@ -52,7 +52,7 @@ public class EditorControllerTest {
         when(mockModel.getCode()).thenReturn("class Main {}");
         doNothing().when(mockTextPane).setText("class Main {}");
         
-        instance.updateUI();
+        instance.reRenderUI();
         assertEquals("class Main {}", mockModel.getCode());
         verify(mockTextPane, times(1)).setText("class Main {}");
     }
