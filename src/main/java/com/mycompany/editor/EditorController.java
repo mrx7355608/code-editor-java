@@ -66,10 +66,6 @@ public class EditorController {
         this.view.setLineNumbersViewBorderColor(theme.get("BORDER"));
     }
 
-    private void handleLineNumbers(KeyEvent e) {
-
-    }
-
     private void attachKeylistenerOnView() {
         this.view.getTextPane().addKeyListener(new KeyAdapter() {
             @Override
