@@ -9,7 +9,9 @@ import javax.swing.JTextPane;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -28,8 +30,8 @@ public class EditorControllerTest {
     private static JTextPane mockTextPane;
     
     
-    @BeforeAll
-    public static void setUpClass() {
+    @BeforeEach
+    public void setUpClass() {
         mockView = mock(EditorView.class);
         mockModel = mock(EditorModel.class);
         mockTextPane = mock(JTextPane.class);
@@ -142,6 +144,51 @@ public class EditorControllerTest {
         
         EditorModel result = instance.getModel();
         assertEquals(mockModel, result);
+    }
+    
+    @Test
+    public void testCustomPasteAction() {
+        System.out.println("customPasteAction");
+        String code = """
+                      public class EditorController {
+                      
+                          private final EditorView view;
+                          private final EditorModel model;
+                          private final SyntaxHighlightController syntaxHighlighter;
+                          private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+                          private final ConcurrentHashMap<Object, Future<?>> delayedMap = new ConcurrentHashMap<>();
+                      
+                          public EditorController(EditorView view, EditorModel model, SyntaxHighlightController syntaxHighlighter) {
+                              this.view = view;
+                              this.model = model;
+                              this.syntaxHighlighter = syntaxHighlighter;
+                              this.attachKeylistenerOnView();
+                          }
+                      }
+                      """;
+        
+        // Mock view methods
+        when(mockView.getEditorContent()).thenReturn(code);
+        doNothing().when(mockView).reRenderLineNumbers();
+        doNothing().when(mockSyntaxHighlighter).highlight();
+                
+        // Test setup
+        EditorModel model = new EditorModel();
+        model.setFile(new EditorFile());
+        EditorController instance = new EditorController(mockView, model, mockSyntaxHighlighter);
+        
+        // Call the actual method which is being tested here
+        instance.customPasteAction();
+        
+        // Verify that these EditorView methods are called once
+        verify(mockView, times(1)).getEditorContent();
+        verify(mockView, times(1)).reRenderLineNumbers();
+        verify(mockSyntaxHighlighter, times(1)).highlight();
+        
+        // Verify that code is updated inside the EditorModel
+        assertEquals(code.split("\n").length, model.getLineNumbers());
+        assertEquals(code, model.getCode());
+        assertEquals("15", model.getLineNumbersModel().get(14));
     }
     
 }

@@ -153,8 +153,9 @@ public class EditorModel {
         this.lineNumbersModel.removeElement(lineStr);
     }
 
-    public void increaseLinesOnPaste(int start, int end) {
-        for (int i = start; i <= end; i++) {
+    public void increaseLinesOnPaste(int linesInTextPane) {
+        for (int i = this.lines + 1; i <= linesInTextPane; i++) {
+            System.out.println("---looping---");
             String lineStr = String.format("%02d", i);
             this.lineNumbersModel.addElement(lineStr);
             this.lines++;

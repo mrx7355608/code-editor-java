@@ -142,5 +142,28 @@ public class EditorModelTest {
         assertEquals("01", listModel.getElementAt(0));
         assertEquals("02", listModel.getElementAt(1));
     }
+    
+    @Test
+    public void testGetLineNumbers() {
+        System.out.println("Should have 1 line by default");
+        EditorModel myInstance = new EditorModel();
+        assertEquals(1, myInstance.getLineNumbers());
+    }
+    
+    @Test
+    public void testIncreamentLinesOnPaste() {
+        System.out.println("increamentLinesOnPaste");
+
+        EditorModel myInstance = new EditorModel();
+        DefaultListModel listModel = myInstance.getLineNumbersModel();
+
+        myInstance.increaseLinesOnPaste(5);
+
+        int exp = 5;
+        assertEquals(exp, myInstance.getLineNumbers());
+        assertEquals(exp, listModel.getSize());
+        assertEquals("01", listModel.getElementAt(0));
+        assertEquals("02", listModel.getElementAt(1));
+    }
 
 }

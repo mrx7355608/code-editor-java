@@ -152,22 +152,28 @@ public class EditorController {
         return e.getKeyCode() == KeyEvent.VK_ENTER;
     }
 
-    private void highlightAndIncreaseLineNumbers() {
-        int linesInTextPane = view.getTextPane().getText().split("\n").length;
+    public void customPasteAction() {
+        // Get pasted code from textPane
+        String code = view.getEditorContent();
+        
+        // If number of lines in textPane are greater than lines in EditorModel
+        // then increase the lines in model and line numbers view
+        int linesInTextPane = code.split("\n").length;
         if (linesInTextPane > model.getLineNumbers()) {
-            model.increaseLinesOnPaste(model.getLineNumbers() + 1, linesInTextPane);
+            model.increaseLinesOnPaste(linesInTextPane);
             view.reRenderLineNumbers();
         }
-        this.model.setCode(view.getTextPane().getText());
+        
+        // Update code inside model
+        this.model.setCode(code);
         this.syntaxHighlighter.highlight();
     }
 
     public void bindCustomPasteAction() {
         JTextPane textPane = this.view.getTextPane();
         Action action = textPane.getActionMap().get("paste-from-clipboard");
-        textPane.getActionMap().put(
-            "paste-from-clipboard",
-            new PasteAction(action, this::highlightAndIncreaseLineNumbers)
+        textPane.getActionMap().put("paste-from-clipboard",
+            new PasteAction(action, this::customPasteAction)
         );
     }
 }
